@@ -10,7 +10,11 @@ import { FollowerAlert } from "@/components/alerts/follower-alert";
 import { GiftSubAlert } from "@/components/alerts/gift-sub-alert";
 import { HostAlert } from "@/components/alerts/host-alert";
 import { KickAlert } from "@/components/alerts/kick-alert";
-import { f1LogoSvg, sharedStyles } from "@/components/alerts/shared";
+import {
+  f1LogoSvg,
+  GithubIcon,
+  sharedStyles,
+} from "@/components/alerts/shared";
 import { SubAlert } from "@/components/alerts/sub-alert";
 import { TipAlert } from "@/components/alerts/tip-alert";
 import { Button } from "@/components/ui/button";
@@ -463,7 +467,7 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
           if (msgEl) msgEl.textContent = '"' + msgVal.replace(/^["']|["']$/g, '').trim() + '"';
           
           if (nameVal) {
-            const numMatch = nameVal.match(/\\d+/);
+            const numMatch = nameVal.match(/\\d+$/);
             if (numMatch) {
               const numEl = document.querySelector('.ferrari-card-number');
               if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
@@ -568,7 +572,7 @@ export default function AlertPreviewPage() {
           </div>
           <nav className="flex items-center gap-6">
             <Link
-              className="font-bold text-red-500 text-xs uppercase tracking-wider transition hover:text-red-400"
+              className="font-bold text-[#DF0631] text-xs uppercase tracking-wider transition hover:text-red-400"
               href="/"
             >
               Studio
@@ -579,6 +583,15 @@ export default function AlertPreviewPage() {
             >
               Instructions
             </Link>
+            <a
+              aria-label="GitHub Repository"
+              className="text-slate-400 transition hover:text-slate-100"
+              href="https://github.com/erikenz/race-control-studio"
+              rel="noopener"
+              target="_blank"
+            >
+              <GithubIcon className="h-4.5 w-4.5" />
+            </a>
           </nav>
         </div>
       </header>

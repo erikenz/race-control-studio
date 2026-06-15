@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { sharedStyles } from "@/components/alerts/shared";
+import { GithubIcon, sharedStyles } from "@/components/alerts/shared";
 
 export default function InstructionsPage() {
   return (
@@ -24,11 +24,20 @@ export default function InstructionsPage() {
               Studio
             </Link>
             <Link
-              className="font-bold text-red-500 text-xs uppercase tracking-wider transition hover:text-red-400"
+              className="font-bold text-[#DF0631] text-xs uppercase tracking-wider transition hover:text-red-400"
               href="/instructions"
             >
               Instructions
             </Link>
+            <a
+              aria-label="GitHub Repository"
+              className="text-slate-400 transition hover:text-slate-100"
+              href="https://github.com/erikenz/race-control-studio"
+              rel="noopener"
+              target="_blank"
+            >
+              <GithubIcon className="h-4.5 w-4.5" />
+            </a>
           </nav>
         </div>
       </header>

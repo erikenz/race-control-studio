@@ -1,6 +1,6 @@
 import { type AlertProps, sharedStyles } from "./shared";
 
-const DRIVER_NUMBER_REGEX = /\d+/;
+const DRIVER_NUMBER_REGEX = /\d+$/;
 const QUOTES_REGEX = /^["']|["']$/g;
 
 // Helper function to extract up to 2 digits from the name or default to 16
@@ -381,7 +381,7 @@ FerrariRadioAlert.getBotrixHtml =
         if (msgEl) msgEl.textContent = '"' + msgVal.replace(/^["']|["']$/g, '').trim() + '"';
         
         if (nameVal && nameVal.indexOf('{') === -1) {
-          const numMatch = nameVal.match(/\\d+/);
+          const numMatch = nameVal.match(/\\d+$/);
           if (numMatch) {
             const numEl = document.querySelector('.ferrari-card-number');
             if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
