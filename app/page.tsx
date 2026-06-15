@@ -534,7 +534,7 @@ export default function AlertPreviewPage() {
           <div className="flex items-center gap-3">
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#e10600] shadow-[0_0_8px_#e10600]" />
             <span className="font-black font-mono text-red-500 text-sm uppercase tracking-widest">
-              F1 Alert Studio
+              Race Control Studio
             </span>
           </div>
           <nav className="flex items-center gap-6">

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     "Configure and style premium Formula 1 telemetry overlay alerts for Kick, Twitch, and YouTube streams.",
   generator: "Next.js",
-  title: "F1 Alert Studio - Custom Kick Stream Overlay Alerts",
+  title: "Race Control Studio - Custom Kick Stream Overlay Alerts",
 };
 
 export const viewport: Viewport = {

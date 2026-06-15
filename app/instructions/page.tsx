@@ -13,7 +13,7 @@ export default function InstructionsPage() {
           <div className="flex items-center gap-3">
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#e10600] shadow-[0_0_8px_#e10600]" />
             <span className="font-black font-mono text-red-500 text-sm uppercase tracking-widest">
-              F1 Alert Studio
+              Race Control Studio
             </span>
           </div>
           <nav className="flex items-center gap-6">
@@ -109,8 +109,8 @@ export default function InstructionsPage() {
                     <strong className="text-slate-200">CSS</strong> and{" "}
                     <strong className="text-slate-200">JS</strong> tabs in
                     Botrix are <strong className="text-red-400">empty</strong>{" "}
-                    to prevent conflicts, as the F1 Alert Studio bundle embeds
-                    styles natively.
+                    to prevent conflicts, as the Race Control Studio bundle
+                    embeds styles natively.
                   </li>
                   <li>
                     <strong className="text-slate-100">Save Settings:</strong>{" "}

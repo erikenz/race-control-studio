@@ -1,8 +1,8 @@
-# F1 Alert Studio 🏎️
+# Race Control Studio 🏎️
 
 An open-source stream overlay toolkit designed to configure and style premium Formula 1 telemetry-style alerts for live stream widgets. While optimized specifically for **Kick Streams** via **Botrix Custom Code**, this tool also fully supports Twitch, YouTube, and Trovo overlays.
 
-Live stream overlays should look as dynamic and professional as television broadcast telemetry. F1 Alert Studio lets you customize renewals, follower notifications, tips, hosts, and sub gifts to resemble official Formula 1 Race Control telemetry feeds.
+Live stream overlays should look as dynamic and professional as television broadcast telemetry. Race Control Studio lets you customize renewals, follower notifications, tips, hosts, and sub gifts to resemble official Formula 1 Race Control telemetry feeds.
 
 ---
 
@@ -42,8 +42,8 @@ Live stream overlays should look as dynamic and professional as television broad
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/erikzen/f1-assets.git
-   cd f1-assets
+   git clone https://github.com/erikzen/race-control-studio.git
+   cd race-control-studio
    ```
 
 2. Install dependencies:
@@ -64,7 +64,7 @@ Live stream overlays should look as dynamic and professional as television broad
 
 Integrating the custom widgets into your Botrix account is simple. Follow these steps:
 
-1. **Copy code from Studio:** Select your alert type in the F1 Alert Studio sidebar (e.g. Subscriptions), customize the telemetry details, and click **📋 Copy HTML**.
+1. **Copy code from Studio:** Select your alert type in the Race Control Studio sidebar (e.g. Subscriptions), customize the telemetry details, and click **📋 Copy HTML**.
 2. **Go to Botrix Alerts:** Open the [Botrix Dashboard](https://botrix.live/), select **Alerts** from the sidebar, and choose the tab that matches your alert category.
 3. **Enable Custom Code:** Scroll to the bottom of the Botrix settings page and enable the **Custom Code** toggle.
 4. **Paste HTML:** Paste the copied code block directly into the **HTML** tab.
