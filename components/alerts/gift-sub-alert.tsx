@@ -1,11 +1,15 @@
-import React from "react"
-import { type AlertProps, F1Logo, f1LogoSvg, fontLink, sharedStyles } from "./shared"
+import {
+  type AlertProps,
+  F1Logo,
+  f1LogoSvg,
+  fontLink,
+  sharedStyles,
+} from "./shared";
 
-export function GiftSubAlert({ name, amount }: AlertProps) {
-  const resolvedName = name.trim() || "PILOTO"
-  const resolvedAmount = amount.trim() || "1"
-  const heading = `RACE CONTROL: ${resolvedName.toUpperCase()} GIFT INCIDENT`
-  const detail = `GIFTED ${resolvedAmount.toUpperCase()} SUBSCRIPTIONS`
+export function GiftSubAlert({ name, text }: AlertProps) {
+  const resolvedName = name.trim() || "PILOTO";
+  const resolvedText = text || "GIFTED SUBSCRIPTIONS";
+  const heading = `RACE CONTROL: ${resolvedName.toUpperCase()} GIFT INCIDENT`;
 
   return (
     <div className="f1-alert-banner">
@@ -14,14 +18,14 @@ export function GiftSubAlert({ name, amount }: AlertProps) {
       </div>
       <div className="f1-alert-body">
         <p className="f1-heading-text">{heading}</p>
-        <p className="f1-detail-text">{detail}</p>
+        <p className="f1-detail-text">{resolvedText.toUpperCase()}</p>
       </div>
     </div>
-  )
+  );
 }
 
-GiftSubAlert.getBotrixHtml = () => {
-  return `<div class="container {disposition} {transition}">
+GiftSubAlert.getBotrixHtml =
+  () => `<div class="container {disposition} {transition}">
   ${fontLink}
   <style>${sharedStyles}</style>
 
@@ -34,8 +38,7 @@ GiftSubAlert.getBotrixHtml = () => {
 
     <div class="f1-alert-body">
       <p class="f1-heading-text">RACE CONTROL: {name} GIFT INCIDENT</p>
-      <p class="f1-detail-text">GIFTED {amount} SUBSCRIPTIONS</p>
+      <p class="f1-detail-text">{text}</p>
     </div>
   </div>
-</div>`
-}
+</div>`;

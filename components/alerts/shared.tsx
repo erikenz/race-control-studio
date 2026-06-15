@@ -7,7 +7,8 @@ export const sharedStyles = `
     .container {
       display: flex !important;
       justify-content: center !important;
-      align-items: center !important;
+      align-items: flex-start !important;
+      padding-top: 40px !important;
       width: 100% !important;
       height: 100% !important;
       background: transparent !important;
@@ -128,8 +129,8 @@ export function F1Logo() {
 }
 
 export interface AlertProps {
-  amount: string;
-  message: string;
+  amount?: string;
+  message?: string;
   name: string;
   text: string;
 }
