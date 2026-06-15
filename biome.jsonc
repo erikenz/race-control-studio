@@ -1,7 +1,37 @@
 {
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/next",
+    "ultracite/biome/react"
+  ],
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite/biome/core", "ultracite/biome/next"],
   "files": {
-    "includes": ["**/*", "!components/ui"]
+    "includes": ["**/*", "!components/ui", "!.agents"]
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "useSortedAttributes": "on",
+        "useSortedProperties": "on",
+        "useSortedKeys": "on",
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":NODE:",
+              ["next", "next/**", "react", "react-dom", "lucide-react"],
+              ["@/components", "@/components/**"],
+              ["@/lib", "@/lib/**"],
+              ["@/hooks", "@/hooks/**"],
+              "@/**",
+              {
+                "type": false
+              }
+            ]
+          }
+        }
+      }
+    }
   }
 }

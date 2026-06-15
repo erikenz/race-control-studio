@@ -41,8 +41,8 @@ export function RaceControlBanner({
           : "polygon(60% 0%, 62% 0%, 51% 100%, 49% 100%)",
         // Out: simple fade.
         opacity: show ? 1 : 0,
-        transitionProperty: show ? "clip-path" : "opacity",
         transitionDuration: show ? "1100ms" : "350ms",
+        transitionProperty: show ? "clip-path" : "opacity",
         transitionTimingFunction: show
           ? "cubic-bezier(0.22, 1, 0.36, 1)"
           : "ease-out",

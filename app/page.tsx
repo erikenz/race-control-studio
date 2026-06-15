@@ -19,11 +19,11 @@ import { Label } from "@/components/ui/label";
 
 // biome-ignore lint/suspicious/noExplicitAny: alert components can be any React component type
 const alertComponents: Record<string, any> = {
-  subscription: SubAlert,
-  "gift-sub": GiftSubAlert,
   followers: FollowerAlert,
+  "gift-sub": GiftSubAlert,
   host: HostAlert,
   kicks: KickAlert,
+  subscription: SubAlert,
   "tip-donate": TipAlert,
 };
 
@@ -35,51 +35,51 @@ interface PresetData {
 }
 
 const PRESETS: Record<string, PresetData> = {
-  subscription: {
-    template: "subscription",
-    name: "HAMILTON_44",
-    text: "stayed with the team for 12 months!",
-    message: "Staying with the team. 12 months completed!",
+  followers: {
+    message: "",
+    name: "Rookie_Driver",
+    template: "followers",
+    text: "Grid entry - green light on track!",
   },
   "gift-sub": {
-    template: "gift-sub",
+    message: "",
     name: "Team_Principal",
+    template: "gift-sub",
     text: "Sponsored 5 drivers in the pit lane!",
-    message: "",
-  },
-  followers: {
-    template: "followers",
-    name: "Rookie_Driver",
-    text: "Grid entry - green light on track!",
-    message: "",
   },
   host: {
-    template: "host",
-    name: "Safety_Car",
-    text: "Restart incident: joined force with 120 viewers!",
     message: "",
-  },
-  "tip-donate": {
-    template: "tip-donate",
-    name: "Pit_Crew",
-    text: "tipped $15.00 USD",
-    message: "For tyre compound upgrade!",
+    name: "Safety_Car",
+    template: "host",
+    text: "Restart incident: joined force with 120 viewers!",
   },
   kicks: {
-    template: "kicks",
-    name: "KickStreamer",
-    text: "sent 500 Kicks!",
     message: "Launch control active! First row start on Kick!",
+    name: "KickStreamer",
+    template: "kicks",
+    text: "sent 500 Kicks!",
+  },
+  subscription: {
+    message: "Staying with the team. 12 months completed!",
+    name: "HAMILTON_44",
+    template: "subscription",
+    text: "stayed with the team for 12 months!",
+  },
+  "tip-donate": {
+    message: "For tyre compound upgrade!",
+    name: "Pit_Crew",
+    template: "tip-donate",
+    text: "tipped $15.00 USD",
   },
 };
 
 const PRESET_LABELS: Record<string, string> = {
-  subscription: "Subscription",
-  "gift-sub": "Gift Sub",
   followers: "Followers",
+  "gift-sub": "Gift Sub",
   host: "Host",
-  "tip-donate": "Tip/Donate",
   kicks: "KICKs",
+  subscription: "Subscription",
+  "tip-donate": "Tip/Donate",
 };
 
 interface QuickPresetsDeckProps {
@@ -178,8 +178,8 @@ function AlertPreviewFeed({
   persistent,
 }: AlertPreviewFeedProps) {
   const bgClasses: Record<string, string> = {
-    chroma: "bg-[#00ff00]",
     black: "bg-slate-955",
+    chroma: "bg-[#00ff00]",
   };
   const bgClass = bgClasses[bgColor] || "bg-grid-pattern bg-slate-900";
 
@@ -301,9 +301,9 @@ function AlertPreviewFeed({
 
 function getCombinedBotrixHtml(template: string, persistent: boolean) {
   const headings: Record<string, string> = {
+    kicks: "RACE CONTROL: {name} KICK INCIDENT",
     subscription: "RACE CONTROL: {name} RENEWAL INCIDENT",
     "tip-donate": "RACE CONTROL: {name} PIT STOP INCIDENT",
-    kicks: "RACE CONTROL: {name} KICK INCIDENT",
   };
   const heading = headings[template] || "RACE CONTROL: {name} INCIDENT";
 
