@@ -300,13 +300,6 @@ function AlertPreviewFeed({
 }
 
 function getCombinedBotrixHtml(template: string, persistent: boolean) {
-  const headings: Record<string, string> = {
-    kicks: "RACE CONTROL: {name} KICK INCIDENT",
-    subscription: "RACE CONTROL: {name} RENEWAL INCIDENT",
-    "tip-donate": "RACE CONTROL: {name} PIT STOP INCIDENT",
-  };
-  const heading = headings[template] || "RACE CONTROL: {name} INCIDENT";
-
   return `<div class="container {disposition} {transition}">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Orbitron:wght@900&family=Inter:wght@400;550;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -350,6 +343,12 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
     }
   </style>
 
+  <template id="botrix-data">
+    <span id="name-val">{name}</span>
+    <span id="text-val">{text}</span>
+    <span id="message-val">{message}</span>
+  </template>
+
   <div class="overlay-grid-container">
     <!-- Standard Alert Banner (Always displayed) -->
     <div id="standard-alert-wrap" class="standard-layout-wrapper">
@@ -360,8 +359,8 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
           </div>
         </div>
         <div class="f1-alert-body">
-          <p class="f1-heading-text">${heading}</p>
-          <p class="f1-detail-text">{text}</p>
+          <p class="f1-heading-text" id="alert-heading"></p>
+          <p class="f1-detail-text" id="alert-detail"></p>
         </div>
       </div>
     </div>
@@ -384,7 +383,7 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
           </div>
           <div class="ferrari-header-content">
             <div class="ferrari-card-name-row">
-              <span class="ferrari-card-name">{name}</span>
+              <span class="ferrari-card-name" id="ferrari-name"></span>
             </div>
             <div class="ferrari-header-bottom-row">
               <div class="ferrari-card-number-wrapper">
@@ -411,7 +410,7 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
           </div>
         </div>
         <div class="ferrari-card-body">
-          <p class="ferrari-message-text">"{message}"</p>
+          <p class="ferrari-message-text" id="ferrari-message"></p>
         </div>
       </div>
     </div>
@@ -419,30 +418,60 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
 
   <script>
     (function() {
-      const nameVal = "{name}";
-      const msgVal = "{message}";
-      
-      const hasMessage = msgVal && 
-                         msgVal !== "{message}" && 
-                         msgVal.trim() !== "" && 
-                         msgVal.trim() !== '""' && 
-                         msgVal.trim() !== '\\"\\"' &&
-                         msgVal.replace(/RADIO:|📻/gi, "").replace(/['"\\s]/g, "") !== "";
-
-      const radioWrap = document.getElementById("radio-alert-wrap");
-
-      if (hasMessage) {
-        if (radioWrap) radioWrap.style.display = "block";
+      const template = document.getElementById('botrix-data');
+      if (template) {
+        const nameVal = template.content.getElementById('name-val').textContent.trim();
+        const textVal = template.content.getElementById('text-val').textContent.trim();
+        const msgVal = template.content.getElementById('message-val').textContent.trim();
         
-        if (nameVal && nameVal.indexOf('{') === -1) {
-          const numMatch = nameVal.match(/\\d+/);
-          if (numMatch) {
-            const numEl = document.querySelector('.ferrari-card-number');
-            if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
-          }
+        // Populate Standard Alert values safely
+        const headingEl = document.getElementById('alert-heading');
+        const detailEl = document.getElementById('alert-detail');
+        const templateType = "${template}";
+        
+        let headingText = "RACE CONTROL: " + nameVal.toUpperCase();
+        if (templateType === "subscription") {
+          headingText += " RENEWAL INCIDENT";
+        } else if (templateType === "tip-donate") {
+          headingText += " PIT STOP INCIDENT";
+        } else if (templateType === "kicks") {
+          headingText += " KICK INCIDENT";
+        } else {
+          headingText += " INCIDENT";
         }
-      } else {
-        if (radioWrap) radioWrap.style.display = "none";
+        
+        if (headingEl) headingEl.textContent = headingText;
+        if (detailEl) detailEl.textContent = textVal.toUpperCase();
+        
+        // Check if custom message exists to show Ferrari Radio
+        const hasMessage = msgVal && 
+                           msgVal !== "{message}" && 
+                           msgVal.trim() !== "" && 
+                           msgVal.trim() !== '""' && 
+                           msgVal.trim() !== '\\"\\"' &&
+                           msgVal.replace(/RADIO:|📻/gi, "").replace(/['"\\s]/g, "") !== "";
+
+        const radioWrap = document.getElementById("radio-alert-wrap");
+
+        if (hasMessage) {
+          if (radioWrap) radioWrap.style.display = "block";
+          
+          const nameEl = document.getElementById('ferrari-name');
+          const msgEl = document.getElementById('ferrari-message');
+          
+          if (nameEl) nameEl.textContent = nameVal.toUpperCase();
+          if (msgEl) msgEl.textContent = '"' + msgVal.replace(/^["']|["']$/g, '').trim() + '"';
+          
+          if (nameVal) {
+            const numMatch = nameVal.match(/\\d+/);
+            if (numMatch) {
+              const numEl = document.querySelector('.ferrari-card-number');
+              if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
+            }
+          }
+        } else {
+          if (radioWrap) radioWrap.style.display = "none";
+        }
       }
     })();
   </script>

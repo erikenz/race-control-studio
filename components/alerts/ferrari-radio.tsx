@@ -315,6 +315,11 @@ FerrariRadioAlert.getBotrixHtml =
     }
   </style>
 
+  <template id="botrix-data">
+    <span id="name-val">{name}</span>
+    <span id="message-val">{message}</span>
+  </template>
+
   <div class="ferrari-radio-card">
     <div class="ferrari-card-header">
       <div class="ferrari-header-bg">
@@ -331,7 +336,7 @@ FerrariRadioAlert.getBotrixHtml =
       </div>
       <div class="ferrari-header-content">
         <div class="ferrari-card-name-row">
-          <span class="ferrari-card-name">{name}</span>
+          <span class="ferrari-card-name" id="ferrari-name"></span>
         </div>
         <div class="ferrari-header-bottom-row">
           <div class="ferrari-card-number-wrapper">
@@ -358,20 +363,29 @@ FerrariRadioAlert.getBotrixHtml =
       </div>
     </div>
     <div class="ferrari-card-body">
-      <p class="ferrari-message-text">"{message}"</p>
+      <p class="ferrari-message-text" id="ferrari-message"></p>
     </div>
   </div>
 
   <script>
     (function() {
-      // Dynamically extract driver number from the Botrix {name} variable
-      const nameVal = "{name}";
-      if (nameVal && nameVal.indexOf('{') === -1) {
-        // Find numbers
-        const numMatch = nameVal.match(/\\d+/);
-        if (numMatch) {
-          const numEl = document.querySelector('.ferrari-card-number');
-          if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
+      const template = document.getElementById('botrix-data');
+      if (template) {
+        const nameVal = template.content.getElementById('name-val').textContent.trim();
+        const msgVal = template.content.getElementById('message-val').textContent.trim();
+        
+        const nameEl = document.getElementById('ferrari-name');
+        const msgEl = document.getElementById('ferrari-message');
+        
+        if (nameEl) nameEl.textContent = nameVal.toUpperCase();
+        if (msgEl) msgEl.textContent = '"' + msgVal.replace(/^["']|["']$/g, '').trim() + '"';
+        
+        if (nameVal && nameVal.indexOf('{') === -1) {
+          const numMatch = nameVal.match(/\\d+/);
+          if (numMatch) {
+            const numEl = document.querySelector('.ferrari-card-number');
+            if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
+          }
         }
       }
     })();
