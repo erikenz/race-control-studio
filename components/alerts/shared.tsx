@@ -11,7 +11,9 @@ export const sharedStyles = `
       padding-top: 40px !important;
       width: 100% !important;
       height: 100% !important;
+      min-height: 100vh !important;
       background: transparent !important;
+      position: relative !important;
     }
 
     .f1-alert-banner {
