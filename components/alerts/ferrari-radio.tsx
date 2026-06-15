@@ -9,7 +9,7 @@ const getDriverNumber = (name: string) => {
   return matches ? matches[0].slice(0, 2) : "16";
 };
 
-const ferrariRadioStyles = `
+export const ferrariRadioStyles = `
     .ferrari-radio-card {
       display: flex !important;
       flex-direction: column !important;
@@ -26,8 +26,8 @@ const ferrariRadioStyles = `
     .ferrari-card-header {
       position: relative !important;
       height: 110px !important;
-      padding: 16px 12px 12px 12px !important;
-      display: flex !important;
+      padding: 12px 12px 10px 12px !important;
+      display: block !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
     }
@@ -79,17 +79,47 @@ const ferrariRadioStyles = `
       position: relative !important;
       z-index: 2 !important;
       display: flex !important;
-      align-items: flex-start !important;
+      flex-direction: column !important;
       justify-content: space-between !important;
       width: 100% !important;
       height: 100% !important;
       box-sizing: border-box !important;
+      min-width: 0 !important;
+    }
+
+    .ferrari-card-name-row {
+      display: block !important;
+      width: 100% !important;
+      text-align: right !important;
+    }
+
+    .ferrari-card-name {
+      color: #DF0631 !important;
+      font-family: 'Montserrat', sans-serif !important;
+      font-weight: 900 !important;
+      font-size: 20px !important;
+      text-transform: uppercase !important;
+      letter-spacing: -0.02em !important;
+      line-height: 1.0 !important;
+      margin: 0 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      display: inline-block !important;
+      width: 100% !important;
+    }
+
+    .ferrari-header-bottom-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: flex-end !important;
+      width: 100% !important;
+      margin-top: auto !important;
     }
 
     .ferrari-card-number-wrapper {
       display: flex !important;
       align-items: flex-end !important;
-      height: 100% !important;
       flex-shrink: 0 !important;
       padding-bottom: 0px !important;
       margin-bottom: -4px !important;
@@ -97,7 +127,7 @@ const ferrariRadioStyles = `
 
     .ferrari-card-number {
       font-family: 'Orbitron', sans-serif !important;
-      font-size: 70px !important;
+      font-size: 55px !important;
       font-weight: 900 !important;
       color: #DF0631 !important;
       line-height: 0.8 !important;
@@ -108,46 +138,33 @@ const ferrariRadioStyles = `
       user-select: none !important;
     }
 
-    .ferrari-header-right {
+    .ferrari-header-right-bottom {
       display: flex !important;
       flex-direction: column !important;
       align-items: flex-end !important;
-      height: 100% !important;
-      justify-content: flex-start !important;
-    }
-
-    .ferrari-card-name {
-      color: #DF0631 !important;
-      font-family: 'Montserrat', sans-serif !important;
-      font-weight: 900 !important;
-      font-size: 24px !important;
-      text-transform: uppercase !important;
-      letter-spacing: -0.02em !important;
-      line-height: 0.9 !important;
-      margin: 0 !important;
-      text-align: right !important;
+      flex-shrink: 0 !important;
     }
 
     .ferrari-card-radio {
       color: #ffffff !important;
       font-family: 'Montserrat', sans-serif !important;
       font-weight: 900 !important;
-      font-size: 24px !important;
+      font-size: 20px !important;
       letter-spacing: -0.02em !important;
       text-transform: uppercase !important;
       line-height: 0.9 !important;
-      margin: 2px 0 0 0 !important;
+      margin: 0 !important;
       text-align: right !important;
     }
 
     .ferrari-card-shield-wrapper {
-      margin-top: 6px !important;
+      margin-top: 4px !important;
       display: block !important;
     }
 
     .ferrari-shield-svg {
-      width: 30px !important;
-      height: 36px !important;
+      width: 26px !important;
+      height: 31px !important;
       display: block !important;
     }
 
@@ -202,62 +219,66 @@ export function FerrariRadioAlert({ name, text, message }: AlertProps) {
           <div className="cava-bar" />
         </div>
         <div className="ferrari-header-content">
-          <div className="ferrari-card-number-wrapper">
-            <span className="ferrari-card-number">{driverNumber}</span>
-          </div>
-          <div className="ferrari-header-right">
+          <div className="ferrari-card-name-row">
             <span className="ferrari-card-name">{resolvedName}</span>
-            <span className="ferrari-card-radio">RADIO</span>
-            <div className="ferrari-card-shield-wrapper">
-              <svg
-                className="ferrari-shield-svg"
-                height="36"
-                viewBox="0 0 100 120"
-                width="30"
-              >
-                <title>Ferrari Shield</title>
-                <path
-                  d="M10 10 C30 10 30 5 50 5 C70 5 70 10 90 10 C90 60 85 90 50 115 C15 90 10 60 10 10 Z"
-                  fill="#ffe100"
-                  stroke="#000000"
-                  strokeWidth="3"
-                />
-                <path
-                  d="M11 11 C30 11 30 6 50 6 C70 6 70 11 89 11 L89 19 C70 19 70 14 50 14 C30 14 30 19 11 19 Z"
-                  fill="#000000"
-                />
-                <rect fill="#008f39" height="7" width="25" x="12" y="11" />
-                <rect fill="#ffffff" height="7" width="26" x="37" y="11" />
-                <rect fill="#e10600" height="7" width="25" x="63" y="11" />
-                <path
-                  d="M48 25 C45 30 40 35 40 45 C40 55 45 60 48 65 C45 70 42 75 42 85 C45 90 48 90 52 90 C50 80 52 75 55 70 C58 75 60 85 62 85 C65 85 68 80 65 70 C60 65 58 55 58 45 C58 35 52 30 48 25 Z"
-                  fill="#000000"
-                />
-                <path
-                  d="M50 30 C51 32 52 35 51 38 C50 40 48 41 46 41 C48 42 50 43 49 46 C48 48 45 50 43 50 C45 52 48 55 48 58 C48 62 46 65 44 68 C47 70 50 73 50 78 C50 82 48 85 47 88 C49 88 52 87 53 84 C54 81 53 78 52 75 C54 77 56 80 57 83 C58 86 58 89 57 91 C59 90 61 88 61 85 C61 82 59 79 57 76 C59 75 61 74 62 72 C63 70 63 68 62 66 C60 67 58 68 56 68 C58 64 59 60 59 55 C59 48 56 42 52 37 C54 36 56 35 57 33 C56 31 54 30 52 30 C51 28 50 26 51 24 C50 25 49 26 49 27 C49 28 50 29 50 30 Z"
-                  fill="#000000"
-                />
-                <text
-                  fill="#000000"
-                  fontFamily="sans-serif"
-                  fontSize="12"
-                  fontWeight="900"
-                  x="32"
-                  y="107"
+          </div>
+          <div className="ferrari-header-bottom-row">
+            <div className="ferrari-card-number-wrapper">
+              <span className="ferrari-card-number">{driverNumber}</span>
+            </div>
+            <div className="ferrari-header-right-bottom">
+              <span className="ferrari-card-radio">RADIO</span>
+              <div className="ferrari-card-shield-wrapper">
+                <svg
+                  className="ferrari-shield-svg"
+                  height="36"
+                  viewBox="0 0 100 120"
+                  width="30"
                 >
-                  S
-                </text>
-                <text
-                  fill="#000000"
-                  fontFamily="sans-serif"
-                  fontSize="12"
-                  fontWeight="900"
-                  x="56"
-                  y="107"
-                >
-                  F
-                </text>
-              </svg>
+                  <title>Ferrari Shield</title>
+                  <path
+                    d="M10 10 C30 10 30 5 50 5 C70 5 70 10 90 10 C90 60 85 90 50 115 C15 90 10 60 10 10 Z"
+                    fill="#ffe100"
+                    stroke="#000000"
+                    strokeWidth="3"
+                  />
+                  <path
+                    d="M11 11 C30 11 30 6 50 6 C70 6 70 11 89 11 L89 19 C70 19 70 14 50 14 C30 14 30 19 11 19 Z"
+                    fill="#000000"
+                  />
+                  <rect fill="#008f39" height="7" width="25" x="12" y="11" />
+                  <rect fill="#ffffff" height="7" width="26" x="37" y="11" />
+                  <rect fill="#e10600" height="7" width="25" x="63" y="11" />
+                  <path
+                    d="M48 25 C45 30 40 35 40 45 C40 55 45 60 48 65 C45 70 42 75 42 85 C45 90 48 90 52 90 C50 80 52 75 55 70 C58 75 60 85 62 85 C65 85 68 80 65 70 C60 65 58 55 58 45 C58 35 52 30 48 25 Z"
+                    fill="#000000"
+                  />
+                  <path
+                    d="M50 30 C51 32 52 35 51 38 C50 40 48 41 46 41 C48 42 50 43 49 46 C48 48 45 50 43 50 C45 52 48 55 48 58 C48 62 46 65 44 68 C47 70 50 73 50 78 C50 82 48 85 47 88 C49 88 52 87 53 84 C54 81 53 78 52 75 C54 77 56 80 57 83 C58 86 58 89 57 91 C59 90 61 88 61 85 C61 82 59 79 57 76 C59 75 61 74 62 72 C63 70 63 68 62 66 C60 67 58 68 56 68 C58 64 59 60 59 55 C59 48 56 42 52 37 C54 36 56 35 57 33 C56 31 54 30 52 30 C51 28 50 26 51 24 C50 25 49 26 49 27 C49 28 50 29 50 30 Z"
+                    fill="#000000"
+                  />
+                  <text
+                    fill="#000000"
+                    fontFamily="sans-serif"
+                    fontSize="12"
+                    fontWeight="900"
+                    x="32"
+                    y="107"
+                  >
+                    S
+                  </text>
+                  <text
+                    fill="#000000"
+                    fontFamily="sans-serif"
+                    fontSize="12"
+                    fontWeight="900"
+                    x="56"
+                    y="107"
+                  >
+                    F
+                  </text>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -307,25 +328,29 @@ FerrariRadioAlert.getBotrixHtml =
         <div class="cava-bar"></div>
       </div>
       <div class="ferrari-header-content">
-        <div class="ferrari-card-number-wrapper">
-          <span class="ferrari-card-number">16</span>
-        </div>
-        <div class="ferrari-header-right">
+        <div class="ferrari-card-name-row">
           <span class="ferrari-card-name">{name}</span>
-          <span class="ferrari-card-radio">RADIO</span>
-          <div class="ferrari-card-shield-wrapper">
-            <svg viewBox="0 0 100 120" class="ferrari-shield-svg">
-              <title>Ferrari Shield</title>
-              <path d="M10 10 C30 10 30 5 50 5 C70 5 70 10 90 10 C90 60 85 90 50 115 C15 90 10 60 10 10 Z" fill="#ffe100" stroke="#000000" stroke-width="3" />
-              <path d="M11 11 C30 11 30 6 50 6 C70 6 70 11 89 11 L89 19 C70 19 70 14 50 14 C30 14 30 19 11 19 Z" fill="#000000" />
-              <rect x="12" y="11" width="25" height="7" fill="#008f39" />
-              <rect x="37" y="11" width="26" height="7" fill="#ffffff" />
-              <rect x="63" y="11" width="25" height="7" fill="#e10600" />
-              <path d="M48 25 C45 30 40 35 40 45 C40 55 45 60 48 65 C45 70 42 75 42 85 C45 90 48 90 52 90 C50 80 52 75 55 70 C58 75 60 85 62 85 C65 85 68 80 65 70 C60 65 58 55 58 45 C58 35 52 30 48 25 Z" fill="#000000" />
-              <path d="M50 30 C51 32 52 35 51 38 C50 40 48 41 46 41 C48 42 50 43 49 46 C48 48 45 50 43 50 C45 52 48 55 48 58 C48 62 46 65 44 68 C47 70 50 73 50 78 C50 82 48 85 47 88 C49 88 52 87 53 84 C54 81 53 78 52 75 C54 77 56 80 57 83 C58 86 58 89 57 91 C59 90 61 88 61 85 C61 82 59 79 57 76 C59 75 61 74 62 72 C63 70 63 68 62 66 C60 67 58 68 56 68 C58 64 59 60 59 55 C59 48 56 42 52 37 C54 36 56 35 57 33 C56 31 54 30 52 30 C51 28 50 26 51 24 C50 25 49 26 49 27 C49 28 50 29 50 30 Z" fill="#000000" />
-              <text x="32" y="107" font-family="sans-serif" font-size="12" font-weight="900" fill="#000000">S</text>
-              <text x="56" y="107" font-family="sans-serif" font-size="12" font-weight="900" fill="#000000">F</text>
-            </svg>
+        </div>
+        <div class="ferrari-header-bottom-row">
+          <div class="ferrari-card-number-wrapper">
+            <span class="ferrari-card-number">16</span>
+          </div>
+          <div class="ferrari-header-right-bottom">
+            <span class="ferrari-card-radio">RADIO</span>
+            <div class="ferrari-card-shield-wrapper">
+              <svg viewBox="0 0 100 120" class="ferrari-shield-svg">
+                <title>Ferrari Shield</title>
+                <path d="M10 10 C30 10 30 5 50 5 C70 5 70 10 90 10 C90 60 85 90 50 115 C15 90 10 60 10 10 Z" fill="#ffe100" stroke="#000000" stroke-width="3" />
+                <path d="M11 11 C30 11 30 6 50 6 C70 6 70 11 89 11 L89 19 C70 19 70 14 50 14 C30 14 30 19 11 19 Z" fill="#000000" />
+                <rect x="12" y="11" width="25" height="7" fill="#008f39" />
+                <rect x="37" y="11" width="26" height="7" fill="#ffffff" />
+                <rect x="63" y="11" width="25" height="7" fill="#e10600" />
+                <path d="M48 25 C45 30 40 35 40 45 C40 55 45 60 48 65 C45 70 42 75 42 85 C45 90 48 90 52 90 C50 80 52 75 55 70 C58 75 60 85 62 85 C65 85 68 80 65 70 C60 65 58 55 58 45 C58 35 52 30 48 25 Z" fill="#000000" />
+                <path d="M50 30 C51 32 52 35 51 38 C50 40 48 41 46 41 C48 42 50 43 49 46 C48 48 45 50 43 50 C45 52 48 55 48 58 C48 62 46 65 44 68 C47 70 50 73 50 78 C50 82 48 85 47 88 C49 88 52 87 53 84 C54 81 53 78 52 75 C54 77 56 80 57 83 C58 86 58 89 57 91 C59 90 61 88 61 85 C61 82 59 79 57 76 C59 75 61 74 62 72 C63 70 63 68 62 66 C60 67 58 68 56 68 C58 64 59 60 59 55 C59 48 56 42 52 37 C54 36 56 35 57 33 C56 31 54 30 52 30 C51 28 50 26 51 24 C50 25 49 26 49 27 C49 28 50 29 50 30 Z" fill="#000000" />
+                <text x="32" y="107" font-family="sans-serif" font-size="12" font-weight="900" fill="#000000">S</text>
+                <text x="56" y="107" font-family="sans-serif" font-size="12" font-weight="900" fill="#000000">F</text>
+              </svg>
+            </div>
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ import {
 
 export function KickAlert({ name, text }: AlertProps) {
   const resolvedName = name.trim() || "PILOTO";
-  const resolvedText = text || "subscribed on Kick";
+  const resolvedText = text || "sent 500 Kicks!";
   const heading = `RACE CONTROL: ${resolvedName.toUpperCase()} KICK INCIDENT`;
 
   return (
