@@ -30,7 +30,8 @@
     "start": "next start",
     "lint": "ultracite check",
     "check": "ultracite check",
-    "fix": "ultracite fix"
+    "fix": "ultracite fix",
+    "doctor": "npx react-doctor@latest"
   },
   "version": "0.1.0",
   "private": true

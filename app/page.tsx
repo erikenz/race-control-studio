@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { type ComponentType, useState } from "react";
 import { FollowerAlert } from "@/components/alerts/follower-alert";
 import { GiftSubAlert } from "@/components/alerts/gift-sub-alert";
 import { HostAlert } from "@/components/alerts/host-alert";
 import { KickAlert } from "@/components/alerts/kick-alert";
 import { RadioAlert, radioAlertStyles } from "@/components/alerts/radio-alert";
 import {
+  type AlertProps,
   f1LogoSvg,
   GithubIcon,
   sharedStyles,
@@ -19,8 +20,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TEAM_RADIO_CONFIGS } from "@/lib/radio-config";
 
-// biome-ignore lint/suspicious/noExplicitAny: alert components can be any React component type
-const alertComponents: Record<string, any> = {
+export type AlertComponentType = ComponentType<AlertProps> & {
+  getBotrixHtml: () => string;
+};
+
+const alertComponents: Record<string, AlertComponentType> = {
   followers: FollowerAlert,
   "gift-sub": GiftSubAlert,
   host: HostAlert,
@@ -153,7 +157,7 @@ function QuickInstructionsCard({ botrixTab }: QuickInstructionsCardProps) {
 }
 
 interface AlertPreviewFeedProps {
-  AlertComponent: React.ComponentType<{ name: string; text: string }>;
+  AlertComponent: ComponentType<AlertProps>;
   bgColor: string;
   message: string;
   name: string;
@@ -307,16 +311,48 @@ function AlertPreviewFeed({
 function getCombinedBotrixHtml(
   template: string,
   persistent: boolean,
+  radioSkinMode: "specific" | "random-all" | "random-selected",
+  selectedRadioSkins: string[],
   radioTeam: string
 ) {
-  const config = TEAM_RADIO_CONFIGS[radioTeam] || TEAM_RADIO_CONFIGS.ferrari;
+  // Determine allowed teams
+  let allowedTeams: string[];
+  if (radioSkinMode === "specific") {
+    allowedTeams = [radioTeam];
+  } else if (radioSkinMode === "random-all") {
+    allowedTeams = Object.keys(TEAM_RADIO_CONFIGS);
+  } else {
+    allowedTeams =
+      selectedRadioSkins.length > 0 ? selectedRadioSkins : ["ferrari"];
+  }
+
+  // Create serialized configurations for client-side JavaScript execution
+  const serializedConfigs = Object.fromEntries(
+    Object.entries(TEAM_RADIO_CONFIGS).map(([key, cfg]) => [
+      key,
+      {
+        accent: cfg.cssVars.accent,
+        bg: cfg.cssVars.bg,
+        fallbackNumber: cfg.fallbackDriverNumber || "16",
+        id: cfg.id,
+        primary: cfg.cssVars.primary,
+        shieldSvg: cfg.shieldSvg.replace(/\n\s*/g, " ").trim(), // Minify SVG content slightly
+        wave: cfg.cssVars.wave,
+      },
+    ])
+  );
+
+  // Set the default stylesheet values using the first allowed team
+  const defaultTeamKey = allowedTeams[0] || "ferrari";
+  const defaultConfig =
+    TEAM_RADIO_CONFIGS[defaultTeamKey] || TEAM_RADIO_CONFIGS.ferrari;
 
   const teamStyles = `
     .radio-card {
-      --radio-bg: ${config.cssVars.bg};
-      --radio-primary: ${config.cssVars.primary};
-      --radio-wave: ${config.cssVars.wave};
-      --radio-accent: ${config.cssVars.accent};
+      --radio-bg: ${defaultConfig.cssVars.bg};
+      --radio-primary: ${defaultConfig.cssVars.primary};
+      --radio-wave: ${defaultConfig.cssVars.wave};
+      --radio-accent: ${defaultConfig.cssVars.accent};
     }
   `;
 
@@ -382,7 +418,7 @@ function getCombinedBotrixHtml(
 
     <!-- Radio Alert Banner (Conditionally displayed via JS if {message} is filled) -->
     <div id="radio-alert-wrap" class="radio-layout-wrapper" style="display: none;">
-      <div class="radio-card radio-team-${config.id}">
+      <div class="radio-card radio-team-${defaultConfig.id}">
         <div class="radio-card-header">
           <div class="radio-header-bg">
             <div class="cava-bar"></div>
@@ -402,12 +438,12 @@ function getCombinedBotrixHtml(
             </div>
             <div class="radio-header-bottom-row">
               <div class="radio-card-number-wrapper">
-                <span class="radio-card-number">${config.fallbackDriverNumber || "16"}</span>
+                <span class="radio-card-number">${defaultConfig.fallbackDriverNumber || "16"}</span>
               </div>
               <div class="radio-header-right-bottom">
                 <span class="radio-card-radio">RADIO</span>
                 <div class="radio-card-shield-wrapper">
-                  ${config.shieldSvg}
+                  ${defaultConfig.shieldSvg}
                 </div>
               </div>
             </div>
@@ -458,17 +494,42 @@ function getCombinedBotrixHtml(
       if (hasMessage) {
         if (radioWrap) radioWrap.style.display = "block";
         
+        // Runtime selection of F1 radio team skin
+        const configs = ${JSON.stringify(serializedConfigs)};
+        const allowed = ${JSON.stringify(allowedTeams)};
+        
+        const teamId = allowed[Math.floor(Math.random() * allowed.length)] || "ferrari";
+        const cfg = configs[teamId];
+        
+        const cardEl = document.querySelector('.radio-card');
+        if (cardEl && cfg) {
+          cardEl.style.setProperty('--radio-bg', cfg.bg);
+          cardEl.style.setProperty('--radio-primary', cfg.primary);
+          cardEl.style.setProperty('--radio-wave', cfg.wave);
+          cardEl.style.setProperty('--radio-accent', cfg.accent);
+          cardEl.className = 'radio-card radio-team-' + cfg.id;
+        }
+        
+        const shieldEl = document.querySelector('.radio-card-shield-wrapper');
+        if (shieldEl && cfg) {
+          shieldEl.innerHTML = cfg.shieldSvg;
+        }
+        
         const nameEl = document.getElementById('radio-name');
         const msgEl = document.getElementById('radio-message');
         
         if (nameEl) nameEl.textContent = nameVal.toUpperCase();
         if (msgEl) msgEl.textContent = '"' + msgVal.replace(/^["']|["']$/g, '').trim() + '"';
         
-        if (nameVal) {
+        const numEl = document.querySelector('.radio-card-number');
+        if (numEl && cfg) {
+          numEl.textContent = cfg.fallbackNumber;
+        }
+        
+        if (nameVal && numEl) {
           const numMatch = nameVal.match(/\\\\d+$/);
           if (numMatch) {
-            const numEl = document.querySelector('.radio-card-number');
-            if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
+            numEl.textContent = numMatch[0].slice(0, 2);
           }
         }
       } else {
@@ -487,6 +548,15 @@ export default function AlertPreviewPage() {
     "Staying with the team. 12 months completed!"
   );
   const [radioTeam, setRadioTeam] = useState("ferrari");
+  const [radioSkinMode, setRadioSkinMode] = useState<
+    "specific" | "random-all" | "random-selected"
+  >("specific");
+  const [selectedRadioSkins, setSelectedRadioSkins] = useState<string[]>([
+    "ferrari",
+    "mercedes",
+    "redbull",
+  ]);
+  const [activePreviewTeam, setActivePreviewTeam] = useState("ferrari");
   const [triggerKey, setTriggerKey] = useState(1);
   const [copied, setCopied] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
@@ -494,6 +564,24 @@ export default function AlertPreviewPage() {
   const [bgColor, setBgColor] = useState("grid"); // "chroma", "grid", "black"
   const [activePreset, setActivePreset] = useState("subscription");
   const [persistent, setPersistent] = useState(false);
+
+  const determinePreviewTeam = (
+    mode: "specific" | "random-all" | "random-selected",
+    selectedSkins: string[],
+    specificTeam: string
+  ): string => {
+    if (mode === "specific") {
+      return specificTeam;
+    }
+    let pool: string[];
+    if (mode === "random-all") {
+      pool = Object.keys(TEAM_RADIO_CONFIGS);
+    } else {
+      pool = selectedSkins.length > 0 ? selectedSkins : ["ferrari"];
+    }
+    const randomIndex = Math.floor(Math.random() * pool.length);
+    return pool[randomIndex] || "ferrari";
+  };
 
   const loadPreset = (presetType: string) => {
     const preset = PRESETS[presetType];
@@ -503,12 +591,45 @@ export default function AlertPreviewPage() {
       setName(preset.name);
       setText(preset.text);
       setMessage(preset.message);
+      const newTeam = determinePreviewTeam(
+        radioSkinMode,
+        selectedRadioSkins,
+        radioTeam
+      );
+      setActivePreviewTeam(newTeam);
       setTriggerKey((k) => k + 1);
     }
   };
 
   const handleTrigger = () => {
+    const newTeam = determinePreviewTeam(
+      radioSkinMode,
+      selectedRadioSkins,
+      radioTeam
+    );
+    setActivePreviewTeam(newTeam);
     setTriggerKey((k) => k + 1);
+  };
+
+  const handleSkinModeChange = (
+    mode: "specific" | "random-all" | "random-selected"
+  ) => {
+    setRadioSkinMode(mode);
+    const newTeam = determinePreviewTeam(mode, selectedRadioSkins, radioTeam);
+    setActivePreviewTeam(newTeam);
+  };
+
+  const handleSelectedSkinsChange = (skins: string[]) => {
+    setSelectedRadioSkins(skins);
+    const newTeam = determinePreviewTeam(radioSkinMode, skins, radioTeam);
+    setActivePreviewTeam(newTeam);
+  };
+
+  const handleSpecificTeamChange = (team: string) => {
+    setRadioTeam(team);
+    if (radioSkinMode === "specific") {
+      setActivePreviewTeam(team);
+    }
   };
 
   const handleCopy = () => {
@@ -516,7 +637,13 @@ export default function AlertPreviewPage() {
       selectedTemplate
     );
     const code = allowsMessage
-      ? getCombinedBotrixHtml(selectedTemplate, persistent, radioTeam)
+      ? getCombinedBotrixHtml(
+          selectedTemplate,
+          persistent,
+          radioSkinMode,
+          selectedRadioSkins,
+          radioTeam
+        )
       : alertComponents[selectedTemplate].getBotrixHtml();
 
     let finalCode = code;
@@ -539,7 +666,13 @@ export default function AlertPreviewPage() {
 
   let rawCode = "";
   if (allowsMessage) {
-    rawCode = getCombinedBotrixHtml(selectedTemplate, persistent, radioTeam);
+    rawCode = getCombinedBotrixHtml(
+      selectedTemplate,
+      persistent,
+      radioSkinMode,
+      selectedRadioSkins,
+      radioTeam
+    );
   } else if (alertComponents[selectedTemplate]) {
     rawCode = alertComponents[selectedTemplate].getBotrixHtml();
   }
@@ -682,27 +815,100 @@ export default function AlertPreviewPage() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <Label
-                      className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
-                      htmlFor="radio-team-select"
-                    >
-                      Radio Team Skin
+                    <Label className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider">
+                      Radio Skin Mode
                     </Label>
                     <select
                       className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
-                      id="radio-team-select"
-                      onChange={(e) => setRadioTeam(e.target.value)}
-                      value={radioTeam}
-                    >
-                      {Object.entries(TEAM_RADIO_CONFIGS).map(
-                        ([key, config]) => (
-                          <option key={key} value={key}>
-                            {config.name}
-                          </option>
+                      onChange={(e) =>
+                        handleSkinModeChange(
+                          e.target.value as
+                            | "specific"
+                            | "random-all"
+                            | "random-selected"
                         )
-                      )}
+                      }
+                      value={radioSkinMode}
+                    >
+                      <option value="specific">Specific Team</option>
+                      <option value="random-all">Random (All Teams)</option>
+                      <option value="random-selected">
+                        Random (Selected Teams)
+                      </option>
                     </select>
                   </div>
+
+                  {radioSkinMode === "specific" && (
+                    <div className="flex animate-fadeIn flex-col gap-1.5">
+                      <Label
+                        className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
+                        htmlFor="radio-team-select"
+                      >
+                        Radio Team Skin
+                      </Label>
+                      <select
+                        className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
+                        id="radio-team-select"
+                        onChange={(e) =>
+                          handleSpecificTeamChange(e.target.value)
+                        }
+                        value={radioTeam}
+                      >
+                        {Object.entries(TEAM_RADIO_CONFIGS).map(
+                          ([key, config]) => (
+                            <option key={key} value={key}>
+                              {config.name}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                  )}
+
+                  {radioSkinMode === "random-selected" && (
+                    <div className="flex animate-fadeIn flex-col gap-2 rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
+                      <Label className="mb-1 font-bold font-mono text-slate-300 text-xs uppercase tracking-wider">
+                        Select Allowed Teams
+                      </Label>
+                      <div className="flex flex-col gap-2.5">
+                        {Object.entries(TEAM_RADIO_CONFIGS).map(
+                          ([key, config]) => {
+                            const isChecked = selectedRadioSkins.includes(key);
+                            return (
+                              <div
+                                className="flex items-center gap-2.5"
+                                key={key}
+                              >
+                                <input
+                                  checked={isChecked}
+                                  className="h-4 w-4 cursor-pointer rounded border border-slate-800 bg-slate-955 text-[#DF0631] accent-[#DF0631] focus:ring-1 focus:ring-red-500"
+                                  id={`select-skin-${key}`}
+                                  onChange={(e) => {
+                                    let newSkins: string[];
+                                    if (e.target.checked) {
+                                      newSkins = [...selectedRadioSkins, key];
+                                    } else {
+                                      newSkins = selectedRadioSkins.filter(
+                                        (s) => s !== key
+                                      );
+                                    }
+                                    handleSelectedSkinsChange(newSkins);
+                                  }}
+                                  type="checkbox"
+                                />
+                                <Label
+                                  className="cursor-pointer select-none font-medium text-slate-300 text-sm hover:text-slate-150"
+                                  htmlFor={`select-skin-${key}`}
+                                >
+                                  {config.name}
+                                </Label>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
 
@@ -770,7 +976,7 @@ export default function AlertPreviewPage() {
               message={message}
               name={name}
               persistent={persistent}
-              radioTeam={radioTeam}
+              radioTeam={activePreviewTeam}
               selectedTemplate={selectedTemplate}
               setBgColor={setBgColor}
               setShowGrid={setShowGrid}
