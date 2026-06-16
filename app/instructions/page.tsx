@@ -4,8 +4,7 @@ import { GithubIcon, sharedStyles } from "@/components/alerts/shared";
 export default function InstructionsPage() {
   return (
     <main className="relative flex min-h-screen flex-col bg-grid-pattern bg-slate-950 font-sans text-slate-100">
-      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: static trusted styles */}
-      <style dangerouslySetInnerHTML={{ __html: sharedStyles }} />
+      <style>{sharedStyles}</style>
 
       {/* Navigation Bar */}
       <header className="sticky top-0 z-20 border-slate-800/80 border-b bg-slate-950/80 backdrop-blur-md">

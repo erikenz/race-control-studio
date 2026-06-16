@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type ComponentType, useState } from "react";
+import { type ComponentType, useReducer } from "react";
 import { FollowerAlert } from "@/components/alerts/follower-alert";
 import { GiftSubAlert } from "@/components/alerts/gift-sub-alert";
 import { HostAlert } from "@/components/alerts/host-alert";
@@ -31,6 +31,29 @@ const alertComponents: Record<string, AlertComponentType> = {
   kicks: KickAlert,
   subscription: SubAlert,
   "tip-donate": TipAlert,
+};
+
+const BG_CLASSES: Record<string, string> = {
+  black: "bg-slate-955",
+  chroma: "bg-[#00ff00]",
+};
+
+const determinePreviewTeam = (
+  mode: "specific" | "random-all" | "random-selected",
+  selectedSkins: string[],
+  specificTeam: string
+): string => {
+  if (mode === "specific") {
+    return specificTeam;
+  }
+  let pool: string[];
+  if (mode === "random-all") {
+    pool = Object.keys(TEAM_RADIO_CONFIGS);
+  } else {
+    pool = selectedSkins.length > 0 ? selectedSkins : ["ferrari"];
+  }
+  const randomIndex = Math.floor(Math.random() * pool.length);
+  return pool[randomIndex] || "ferrari";
 };
 
 interface PresetData {
@@ -185,11 +208,7 @@ function AlertPreviewFeed({
   persistent,
   radioTeam,
 }: AlertPreviewFeedProps) {
-  const bgClasses: Record<string, string> = {
-    black: "bg-slate-955",
-    chroma: "bg-[#00ff00]",
-  };
-  const bgClass = bgClasses[bgColor] || "bg-grid-pattern bg-slate-900";
+  const bgClass = BG_CLASSES[bgColor] || "bg-grid-pattern bg-slate-900";
 
   const allowsMessage = ["subscription", "tip-donate", "kicks"].includes(
     selectedTemplate
@@ -226,6 +245,7 @@ function AlertPreviewFeed({
           {/* Alignment Grid Toggle */}
           <div className="flex items-center gap-2">
             <input
+              aria-label="Alignment Grid"
               checked={showGrid}
               className="h-4 w-4 cursor-pointer rounded border border-slate-800 bg-slate-955 text-[#DF0631] accent-[#DF0631] focus:ring-1 focus:ring-red-500"
               id="grid-toggle"
@@ -259,10 +279,8 @@ function AlertPreviewFeed({
 
         {/* Persistent mode style overrides inside simulator */}
         {persistent && (
-          <style
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: static preview styles override
-            dangerouslySetInnerHTML={{
-              __html: `
+          <style>
+            {`
             .f1-alert-banner, .radio-card {
               animation: none !important;
               opacity: 1 !important;
@@ -271,9 +289,8 @@ function AlertPreviewFeed({
             .radio-card {
               clip-path: none !important;
             }
-          `,
-            }}
-          />
+            `}
+          </style>
         )}
 
         {/* Native Component Render stage */}
@@ -540,192 +557,559 @@ function getCombinedBotrixHtml(
 </div>`;
 }
 
-export default function AlertPreviewPage() {
-  const [selectedTemplate, setSelectedTemplate] = useState("subscription");
-  const [name, setName] = useState("HAMILTON_44");
-  const [text, setText] = useState("stayed with the team for 12 months!");
-  const [message, setMessage] = useState(
-    "Staying with the team. 12 months completed!"
-  );
-  const [radioTeam, setRadioTeam] = useState("ferrari");
-  const [radioSkinMode, setRadioSkinMode] = useState<
-    "specific" | "random-all" | "random-selected"
-  >("specific");
-  const [selectedRadioSkins, setSelectedRadioSkins] = useState<string[]>([
-    "ferrari",
-    "mercedes",
-    "redbull",
-  ]);
-  const [activePreviewTeam, setActivePreviewTeam] = useState("ferrari");
-  const [triggerKey, setTriggerKey] = useState(1);
-  const [copied, setCopied] = useState(false);
-  const [showGrid, setShowGrid] = useState(true);
-  const [showCode, setShowCode] = useState(false);
-  const [bgColor, setBgColor] = useState("grid"); // "chroma", "grid", "black"
-  const [activePreset, setActivePreset] = useState("subscription");
-  const [persistent, setPersistent] = useState(false);
+interface AlertPageState {
+  activePreset: string;
+  activePreviewTeam: string;
+  bgColor: string;
+  copied: boolean;
+  message: string;
+  name: string;
+  persistent: boolean;
+  radioSkinMode: "specific" | "random-all" | "random-selected";
+  radioTeam: string;
+  selectedRadioSkins: string[];
+  selectedTemplate: string;
+  showCode: boolean;
+  showGrid: boolean;
+  text: string;
+  triggerKey: number;
+}
 
-  const determinePreviewTeam = (
-    mode: "specific" | "random-all" | "random-selected",
-    selectedSkins: string[],
-    specificTeam: string
-  ): string => {
-    if (mode === "specific") {
-      return specificTeam;
-    }
-    let pool: string[];
-    if (mode === "random-all") {
-      pool = Object.keys(TEAM_RADIO_CONFIGS);
-    } else {
-      pool = selectedSkins.length > 0 ? selectedSkins : ["ferrari"];
-    }
-    const randomIndex = Math.floor(Math.random() * pool.length);
-    return pool[randomIndex] || "ferrari";
-  };
+const INITIAL_STATE: AlertPageState = {
+  activePreset: "subscription",
+  activePreviewTeam: "ferrari",
+  bgColor: "grid",
+  copied: false,
+  message: "Staying with the team. 12 months completed!",
+  name: "HAMILTON_44",
+  persistent: false,
+  radioSkinMode: "specific",
+  radioTeam: "ferrari",
+  selectedRadioSkins: ["ferrari", "mercedes", "redbull"],
+  selectedTemplate: "subscription",
+  showCode: false,
+  showGrid: true,
+  text: "stayed with the team for 12 months!",
+  triggerKey: 1,
+};
 
-  const loadPreset = (presetType: string) => {
-    const preset = PRESETS[presetType];
-    if (preset) {
-      setActivePreset(presetType);
-      setSelectedTemplate(preset.template);
-      setName(preset.name);
-      setText(preset.text);
-      setMessage(preset.message);
+type AlertPageAction =
+  | { type: "LOAD_PRESET"; presetType: string }
+  | { type: "TRIGGER_REPLAY" }
+  | { type: "SET_NAME"; name: string }
+  | { type: "SET_TEXT"; text: string }
+  | { type: "SET_MESSAGE"; message: string }
+  | {
+      type: "SET_SKIN_MODE";
+      mode: "specific" | "random-all" | "random-selected";
+    }
+  | { type: "SET_SPECIFIC_TEAM"; team: string }
+  | { type: "SET_SELECTED_SKINS"; skins: string[] }
+  | { type: "SET_PERSISTENT"; persistent: boolean }
+  | { type: "SET_COPIED"; copied: boolean }
+  | { type: "SET_SHOW_GRID"; showGrid: boolean }
+  | { type: "SET_SHOW_CODE"; showCode: boolean }
+  | { type: "SET_BG_COLOR"; bgColor: string };
+
+function pageReducer(
+  state: AlertPageState,
+  action: AlertPageAction
+): AlertPageState {
+  switch (action.type) {
+    case "LOAD_PRESET": {
+      const preset = PRESETS[action.presetType];
+      if (!preset) {
+        return state;
+      }
       const newTeam = determinePreviewTeam(
-        radioSkinMode,
-        selectedRadioSkins,
-        radioTeam
+        state.radioSkinMode,
+        state.selectedRadioSkins,
+        state.radioTeam
       );
-      setActivePreviewTeam(newTeam);
-      setTriggerKey((k) => k + 1);
+      return {
+        ...state,
+        activePreset: action.presetType,
+        activePreviewTeam: newTeam,
+        message: preset.message,
+        name: preset.name,
+        selectedTemplate: preset.template,
+        text: preset.text,
+        triggerKey: state.triggerKey + 1,
+      };
     }
-  };
-
-  const handleTrigger = () => {
-    const newTeam = determinePreviewTeam(
-      radioSkinMode,
-      selectedRadioSkins,
-      radioTeam
-    );
-    setActivePreviewTeam(newTeam);
-    setTriggerKey((k) => k + 1);
-  };
-
-  const handleSkinModeChange = (
-    mode: "specific" | "random-all" | "random-selected"
-  ) => {
-    setRadioSkinMode(mode);
-    const newTeam = determinePreviewTeam(mode, selectedRadioSkins, radioTeam);
-    setActivePreviewTeam(newTeam);
-  };
-
-  const handleSelectedSkinsChange = (skins: string[]) => {
-    setSelectedRadioSkins(skins);
-    const newTeam = determinePreviewTeam(radioSkinMode, skins, radioTeam);
-    setActivePreviewTeam(newTeam);
-  };
-
-  const handleSpecificTeamChange = (team: string) => {
-    setRadioTeam(team);
-    if (radioSkinMode === "specific") {
-      setActivePreviewTeam(team);
-    }
-  };
-
-  const handleCopy = () => {
-    const allowsMessage = ["subscription", "tip-donate", "kicks"].includes(
-      selectedTemplate
-    );
-    const code = allowsMessage
-      ? getCombinedBotrixHtml(
-          selectedTemplate,
-          persistent,
-          radioSkinMode,
-          selectedRadioSkins,
-          radioTeam
-        )
-      : alertComponents[selectedTemplate].getBotrixHtml();
-
-    let finalCode = code;
-    if (persistent && !allowsMessage) {
-      finalCode = finalCode.replace(
-        "animation: f1PlayAlert 8s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;",
-        "animation: none !important; opacity: 1 !important; clip-path: polygon(0% 0%, 111% 0%, 100% 100%, -11% 100%) !important;"
+    case "TRIGGER_REPLAY": {
+      const newTeam = determinePreviewTeam(
+        state.radioSkinMode,
+        state.selectedRadioSkins,
+        state.radioTeam
       );
+      return {
+        ...state,
+        activePreviewTeam: newTeam,
+        triggerKey: state.triggerKey + 1,
+      };
     }
+    case "SET_NAME":
+      return { ...state, name: action.name };
+    case "SET_TEXT":
+      return { ...state, text: action.text };
+    case "SET_MESSAGE":
+      return { ...state, message: action.message };
+    case "SET_SKIN_MODE": {
+      const newTeam = determinePreviewTeam(
+        action.mode,
+        state.selectedRadioSkins,
+        state.radioTeam
+      );
+      return {
+        ...state,
+        activePreviewTeam: newTeam,
+        radioSkinMode: action.mode,
+      };
+    }
+    case "SET_SPECIFIC_TEAM": {
+      const newTeam =
+        state.radioSkinMode === "specific"
+          ? action.team
+          : state.activePreviewTeam;
+      return {
+        ...state,
+        activePreviewTeam: newTeam,
+        radioTeam: action.team,
+      };
+    }
+    case "SET_SELECTED_SKINS": {
+      const newTeam = determinePreviewTeam(
+        state.radioSkinMode,
+        action.skins,
+        state.radioTeam
+      );
+      return {
+        ...state,
+        activePreviewTeam: newTeam,
+        selectedRadioSkins: action.skins,
+      };
+    }
+    case "SET_PERSISTENT":
+      return { ...state, persistent: action.persistent };
+    case "SET_COPIED":
+      return { ...state, copied: action.copied };
+    case "SET_SHOW_GRID":
+      return { ...state, showGrid: action.showGrid };
+    case "SET_SHOW_CODE":
+      return { ...state, showCode: action.showCode };
+    case "SET_BG_COLOR":
+      return { ...state, bgColor: action.bgColor };
+    default:
+      return state;
+  }
+}
 
-    navigator.clipboard.writeText(finalCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2050);
-  };
+function AlertHeader() {
+  return (
+    <header className="sticky top-0 z-20 border-slate-800/80 border-b bg-slate-955/80 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-[95vw] items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[#e10600] shadow-[0_0_8px_#e10600]" />
+          <span className="font-black font-mono text-red-500 text-sm uppercase tracking-widest">
+            Race Control Studio
+          </span>
+        </div>
+        <nav className="flex items-center gap-6">
+          <Link
+            className="font-bold text-[#DF0631] text-xs uppercase tracking-wider transition hover:text-red-400"
+            href="/"
+          >
+            Studio
+          </Link>
+          <Link
+            className="font-bold text-slate-400 text-xs uppercase tracking-wider transition hover:text-slate-100"
+            href="/instructions"
+          >
+            Instructions
+          </Link>
+          <a
+            aria-label="GitHub Repository"
+            className="text-slate-400 transition hover:text-slate-100"
+            href="https://github.com/erikenz/race-control-studio"
+            rel="noopener"
+            target="_blank"
+          >
+            <GithubIcon className="h-4.5 w-4.5" />
+          </a>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+interface ConfiguratorSidebarProps {
+  allowsMessage: boolean;
+  botrixTabName: string;
+  dispatch: React.Dispatch<AlertPageAction>;
+  onCopy: () => void;
+  onTrigger: () => void;
+  state: AlertPageState;
+}
+
+function ConfiguratorSidebar({
+  state,
+  dispatch,
+  allowsMessage,
+  onCopy,
+  onTrigger,
+  botrixTabName,
+}: ConfiguratorSidebarProps) {
+  return (
+    <div className="relative flex flex-col gap-5 rounded-xl border border-slate-800/85 bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md md:p-6 lg:col-span-4 xl:col-span-3">
+      <div className="absolute top-0 left-6 h-[3px] w-24 bg-[#e10600]" />
+
+      <h2 className="flex items-center justify-between border-slate-800/60 border-b pb-3 font-extrabold text-lg uppercase tracking-wide">
+        <span>Alert Configurator</span>
+        <span className="rounded bg-red-500/10 px-2 py-0.5 font-mono font-semibold text-red-500 text-xs">
+          FORMULA-1
+        </span>
+      </h2>
+
+      {/* Step 1: Alert Presets */}
+      <div className="flex flex-col gap-2">
+        <Label className="font-bold font-mono text-slate-400 text-xs uppercase tracking-wider">
+          Test Alerts Presets
+        </Label>
+        <QuickPresetsDeck
+          activePreset={state.activePreset}
+          onLoadPreset={(presetType) =>
+            dispatch({ presetType, type: "LOAD_PRESET" })
+          }
+        />
+      </div>
+
+      {/* Step 2: Input Variables */}
+      <div className="flex flex-col gap-4 border-slate-800/60 border-t pt-4">
+        {/* Driver Name Input */}
+        <div className="flex flex-col gap-1.5">
+          <Label
+            className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
+            htmlFor="name-input"
+          >
+            Driver Name
+          </Label>
+          <Input
+            className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
+            id="name-input"
+            onChange={(e) =>
+              dispatch({ name: e.target.value, type: "SET_NAME" })
+            }
+            placeholder="e.g. LEWIS_44"
+            type="text"
+            value={state.name}
+          />
+        </div>
+
+        {/* Alert Text Input */}
+        <div className="flex flex-col gap-1.5">
+          <Label
+            className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
+            htmlFor="text-input"
+          >
+            Alert Text (Configured in Botrix Panel)
+          </Label>
+          <Input
+            className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
+            id="text-input"
+            onChange={(e) =>
+              dispatch({ text: e.target.value, type: "SET_TEXT" })
+            }
+            placeholder="e.g. subscribed"
+            type="text"
+            value={state.text}
+          />
+        </div>
+
+        {/* Custom Message Input (Conditional) */}
+        {allowsMessage && (
+          <>
+            <div className="flex flex-col gap-1.5">
+              <Label
+                className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
+                htmlFor="message-input"
+              >
+                Custom User Message (Radio Message)
+              </Label>
+              <Input
+                className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
+                id="message-input"
+                onChange={(e) =>
+                  dispatch({ message: e.target.value, type: "SET_MESSAGE" })
+                }
+                placeholder="e.g. Staying with the team. 12 months completed!"
+                type="text"
+                value={state.message}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider">
+                Radio Skin Mode
+              </Label>
+              <select
+                className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (
+                    val === "specific" ||
+                    val === "random-all" ||
+                    val === "random-selected"
+                  ) {
+                    dispatch({ mode: val, type: "SET_SKIN_MODE" });
+                  }
+                }}
+                value={state.radioSkinMode}
+              >
+                <option value="specific">Specific Team</option>
+                <option value="random-all">Random (All Teams)</option>
+                <option value="random-selected">Random (Selected Teams)</option>
+              </select>
+            </div>
+
+            {state.radioSkinMode === "specific" && (
+              <div className="flex animate-fadeIn flex-col gap-1.5">
+                <Label
+                  className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
+                  htmlFor="radio-team-select"
+                >
+                  Radio Team Skin
+                </Label>
+                <select
+                  className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
+                  id="radio-team-select"
+                  onChange={(e) =>
+                    dispatch({
+                      team: e.target.value,
+                      type: "SET_SPECIFIC_TEAM",
+                    })
+                  }
+                  value={state.radioTeam}
+                >
+                  {Object.entries(TEAM_RADIO_CONFIGS).map(([key, config]) => (
+                    <option key={key} value={key}>
+                      {config.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {state.radioSkinMode === "random-selected" && (
+              <div className="flex animate-fadeIn flex-col gap-2 rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
+                <Label className="mb-1 font-bold font-mono text-slate-300 text-xs uppercase tracking-wider">
+                  Select Allowed Teams
+                </Label>
+                <div className="flex flex-col gap-2.5">
+                  {Object.entries(TEAM_RADIO_CONFIGS).map(([key, config]) => {
+                    const isChecked = state.selectedRadioSkins.includes(key);
+                    return (
+                      <div className="flex items-center gap-2.5" key={key}>
+                        <input
+                          aria-label={config.name}
+                          checked={isChecked}
+                          className="h-4 w-4 cursor-pointer rounded border border-slate-800 bg-slate-955 text-[#DF0631] accent-[#DF0631] focus:ring-1 focus:ring-red-500"
+                          id={`select-skin-${key}`}
+                          onChange={(e) => {
+                            let newSkins: string[];
+                            if (e.target.checked) {
+                              newSkins = [...state.selectedRadioSkins, key];
+                            } else {
+                              newSkins = state.selectedRadioSkins.filter(
+                                (s) => s !== key
+                              );
+                            }
+                            dispatch({
+                              skins: newSkins,
+                              type: "SET_SELECTED_SKINS",
+                            });
+                          }}
+                          type="checkbox"
+                        />
+                        <Label
+                          className="cursor-pointer select-none font-medium text-slate-300 text-sm hover:text-slate-150"
+                          htmlFor={`select-skin-${key}`}
+                        >
+                          {config.name}
+                        </Label>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Persistent Mode Toggle */}
+        <div className="mt-1 flex items-center gap-2">
+          <input
+            aria-label="Persistent Mode (keep alert visible for setup)"
+            checked={state.persistent}
+            className="h-4 w-4 cursor-pointer rounded border border-slate-800 bg-slate-955 text-[#DF0631] accent-[#DF0631] focus:ring-1 focus:ring-red-500"
+            id="persistent-toggle"
+            onChange={(e) =>
+              dispatch({ persistent: e.target.checked, type: "SET_PERSISTENT" })
+            }
+            type="checkbox"
+          />
+          <Label
+            className="cursor-pointer select-none font-medium text-slate-400 text-xs hover:text-slate-200"
+            htmlFor="persistent-toggle"
+          >
+            Persistent Mode (keep alert visible for setup)
+          </Label>
+        </div>
+      </div>
+
+      {/* Step 3: Export buttons */}
+      <div className="flex flex-col gap-3 border-slate-800/60 border-t pt-4">
+        <div className="flex gap-3">
+          <Button
+            className={`flex-1 rounded-lg py-2.5 font-extrabold text-xs uppercase tracking-wider transition-all active:scale-[0.98] ${
+              state.copied
+                ? "bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:bg-emerald-700"
+                : "bg-[#DF0631] text-white shadow-[0_4px_12px_rgba(223,6,49,0.2)] hover:bg-[#c3052a]"
+            }`}
+            onClick={onCopy}
+          >
+            {state.copied ? "🏁 COPIED HTML!" : "📋 COPY HTML"}
+          </Button>
+
+          <Button
+            className="flex-1 rounded-lg border border-slate-700 bg-slate-800/40 py-2.5 font-extrabold text-slate-200 text-xs uppercase tracking-wider transition-all hover:bg-slate-700 hover:text-white active:scale-[0.98]"
+            onClick={onTrigger}
+          >
+            🔄 REPLAY PREVIEW
+          </Button>
+        </div>
+
+        <Button
+          className="border-slate-800 py-1.5 font-mono text-slate-400 text-xs uppercase tracking-wider hover:bg-slate-800/40 hover:text-slate-200"
+          onClick={() =>
+            dispatch({ showCode: !state.showCode, type: "SET_SHOW_CODE" })
+          }
+          size="sm"
+          variant="outline"
+        >
+          {state.showCode
+            ? "Hide Compiled Widget Code"
+            : "Show Compiled Widget Code"}
+        </Button>
+      </div>
+
+      {/* Help instructions card */}
+      <QuickInstructionsCard botrixTab={botrixTabName} />
+    </div>
+  );
+}
+
+interface PreviewPanelProps {
+  AlertComponent: ComponentType<AlertProps>;
+  compiledCode: string;
+  dispatch: React.Dispatch<AlertPageAction>;
+  onCopy: () => void;
+  state: AlertPageState;
+}
+
+function PreviewPanel({
+  AlertComponent,
+  state,
+  dispatch,
+  compiledCode,
+  onCopy,
+}: PreviewPanelProps) {
+  return (
+    <div className="flex flex-col gap-4 lg:col-span-8 xl:col-span-9">
+      <AlertPreviewFeed
+        AlertComponent={AlertComponent}
+        bgColor={state.bgColor}
+        message={state.message}
+        name={state.name}
+        persistent={state.persistent}
+        radioTeam={state.activePreviewTeam}
+        selectedTemplate={state.selectedTemplate}
+        setBgColor={(val) => dispatch({ bgColor: val, type: "SET_BG_COLOR" })}
+        setShowGrid={(val) =>
+          dispatch({ showGrid: val, type: "SET_SHOW_GRID" })
+        }
+        showGrid={state.showGrid}
+        text={state.text}
+        triggerKey={state.triggerKey}
+      />
+
+      {/* Code Inspection Area */}
+      {state.showCode && (
+        <div className="relative flex flex-col gap-3 rounded-xl border border-slate-850 bg-slate-955 p-4 shadow-inner">
+          <div className="flex items-center justify-between border-slate-900 border-b pb-2">
+            <span className="font-bold font-mono text-slate-400 text-xs uppercase tracking-wider">
+              Compiled HTML Export Block
+            </span>
+            <button
+              className="font-bold font-mono text-[#DF0631] text-xs uppercase tracking-widest hover:text-red-400"
+              onClick={onCopy}
+              type="button"
+            >
+              Copy Output
+            </button>
+          </div>
+          <pre className="scrollbar-thin scrollbar-thumb-slate-800 max-h-[300px] overflow-x-auto rounded-lg border border-slate-900/80 bg-slate-900/60 p-3 font-mono text-slate-355 text-xs">
+            <code>{compiledCode}</code>
+          </pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function AlertPreviewPage() {
+  const [state, dispatch] = useReducer(pageReducer, INITIAL_STATE);
 
   const allowsMessage = ["subscription", "tip-donate", "kicks"].includes(
-    selectedTemplate
+    state.selectedTemplate
   );
-  const AlertComponent = alertComponents[selectedTemplate] || SubAlert;
+  const AlertComponent = alertComponents[state.selectedTemplate] || SubAlert;
 
   let rawCode = "";
   if (allowsMessage) {
     rawCode = getCombinedBotrixHtml(
-      selectedTemplate,
-      persistent,
-      radioSkinMode,
-      selectedRadioSkins,
-      radioTeam
+      state.selectedTemplate,
+      state.persistent,
+      state.radioSkinMode,
+      state.selectedRadioSkins,
+      state.radioTeam
     );
-  } else if (alertComponents[selectedTemplate]) {
-    rawCode = alertComponents[selectedTemplate].getBotrixHtml();
+  } else if (alertComponents[state.selectedTemplate]) {
+    rawCode = alertComponents[state.selectedTemplate].getBotrixHtml();
   }
 
   let compiledCode = rawCode;
-  if (persistent && !allowsMessage) {
+  if (state.persistent && !allowsMessage) {
     compiledCode = compiledCode.replace(
       "animation: f1PlayAlert 8s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;",
       "animation: none !important; opacity: 1 !important; clip-path: polygon(0% 0%, 111% 0%, 100% 100%, -11% 100%) !important;"
     );
   }
 
-  const botrixTabName = PRESET_LABELS[activePreset] || "Alerts";
+  const handleCopy = () => {
+    navigator.clipboard.writeText(compiledCode);
+    dispatch({ copied: true, type: "SET_COPIED" });
+    setTimeout(() => dispatch({ copied: false, type: "SET_COPIED" }), 2050);
+  };
+
+  const botrixTabName = PRESET_LABELS[state.activePreset] || "Alerts";
 
   return (
     <main className="relative flex min-h-screen flex-col overflow-hidden bg-grid-pattern bg-slate-955 text-slate-100">
-      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: static trusted styles */}
-      <style dangerouslySetInnerHTML={{ __html: sharedStyles }} />
+      <style>{sharedStyles}</style>
 
       {/* Navigation Bar */}
-      <header className="sticky top-0 z-20 border-slate-800/80 border-b bg-slate-955/80 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-[95vw] items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-[#e10600] shadow-[0_0_8px_#e10600]" />
-            <span className="font-black font-mono text-red-500 text-sm uppercase tracking-widest">
-              Race Control Studio
-            </span>
-          </div>
-          <nav className="flex items-center gap-6">
-            <Link
-              className="font-bold text-[#DF0631] text-xs uppercase tracking-wider transition hover:text-red-400"
-              href="/"
-            >
-              Studio
-            </Link>
-            <Link
-              className="font-bold text-slate-400 text-xs uppercase tracking-wider transition hover:text-slate-100"
-              href="/instructions"
-            >
-              Instructions
-            </Link>
-            <a
-              aria-label="GitHub Repository"
-              className="text-slate-400 transition hover:text-slate-100"
-              href="https://github.com/erikenz/race-control-studio"
-              rel="noopener"
-              target="_blank"
-            >
-              <GithubIcon className="h-4.5 w-4.5" />
-            </a>
-          </nav>
-        </div>
-      </header>
+      <AlertHeader />
 
       {/* Background design elements */}
       <div className="pointer-events-none absolute top-0 right-0 h-[500px] w-[500px] rounded-full bg-[#e10600]/5 blur-[120px]" />
@@ -735,277 +1119,23 @@ export default function AlertPreviewPage() {
       <div className="z-10 mx-auto flex w-full max-w-[95vw] flex-1 flex-col gap-6 p-4 md:p-6">
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
           {/* LEFT: Controls Column (col-span-4) */}
-          <div className="relative flex flex-col gap-5 rounded-xl border border-slate-800/85 bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md md:p-6 lg:col-span-4 xl:col-span-3">
-            <div className="absolute top-0 left-6 h-[3px] w-24 bg-[#e10600]" />
-
-            <h2 className="flex items-center justify-between border-slate-800/60 border-b pb-3 font-extrabold text-lg uppercase tracking-wide">
-              <span>Alert Configurator</span>
-              <span className="rounded bg-red-500/10 px-2 py-0.5 font-mono font-semibold text-red-500 text-xs">
-                FORMULA-1
-              </span>
-            </h2>
-
-            {/* Step 1: Alert Presets */}
-            <div className="flex flex-col gap-2">
-              <Label className="font-bold font-mono text-slate-400 text-xs uppercase tracking-wider">
-                Test Alerts Presets
-              </Label>
-              <QuickPresetsDeck
-                activePreset={activePreset}
-                onLoadPreset={loadPreset}
-              />
-            </div>
-
-            {/* Step 2: Input Variables */}
-            <div className="flex flex-col gap-4 border-slate-800/60 border-t pt-4">
-              {/* Driver Name Input */}
-              <div className="flex flex-col gap-1.5">
-                <Label
-                  className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
-                  htmlFor="name-input"
-                >
-                  Driver Name
-                </Label>
-                <Input
-                  className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
-                  id="name-input"
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. LEWIS_44"
-                  type="text"
-                  value={name}
-                />
-              </div>
-
-              {/* Alert Text Input */}
-              <div className="flex flex-col gap-1.5">
-                <Label
-                  className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
-                  htmlFor="text-input"
-                >
-                  Alert Text (Configured in Botrix Panel)
-                </Label>
-                <Input
-                  className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
-                  id="text-input"
-                  onChange={(e) => setText(e.target.value)}
-                  placeholder="e.g. subscribed"
-                  type="text"
-                  value={text}
-                />
-              </div>
-
-              {/* Custom Message Input (Conditional) */}
-              {allowsMessage && (
-                <>
-                  <div className="flex flex-col gap-1.5">
-                    <Label
-                      className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
-                      htmlFor="message-input"
-                    >
-                      Custom User Message (Radio Message)
-                    </Label>
-                    <Input
-                      className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
-                      id="message-input"
-                      onChange={(e) => setMessage(e.target.value)}
-                      placeholder="e.g. Staying with the team. 12 months completed!"
-                      type="text"
-                      value={message}
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1.5">
-                    <Label className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider">
-                      Radio Skin Mode
-                    </Label>
-                    <select
-                      className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
-                      onChange={(e) =>
-                        handleSkinModeChange(
-                          e.target.value as
-                            | "specific"
-                            | "random-all"
-                            | "random-selected"
-                        )
-                      }
-                      value={radioSkinMode}
-                    >
-                      <option value="specific">Specific Team</option>
-                      <option value="random-all">Random (All Teams)</option>
-                      <option value="random-selected">
-                        Random (Selected Teams)
-                      </option>
-                    </select>
-                  </div>
-
-                  {radioSkinMode === "specific" && (
-                    <div className="flex animate-fadeIn flex-col gap-1.5">
-                      <Label
-                        className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
-                        htmlFor="radio-team-select"
-                      >
-                        Radio Team Skin
-                      </Label>
-                      <select
-                        className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
-                        id="radio-team-select"
-                        onChange={(e) =>
-                          handleSpecificTeamChange(e.target.value)
-                        }
-                        value={radioTeam}
-                      >
-                        {Object.entries(TEAM_RADIO_CONFIGS).map(
-                          ([key, config]) => (
-                            <option key={key} value={key}>
-                              {config.name}
-                            </option>
-                          )
-                        )}
-                      </select>
-                    </div>
-                  )}
-
-                  {radioSkinMode === "random-selected" && (
-                    <div className="flex animate-fadeIn flex-col gap-2 rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
-                      <Label className="mb-1 font-bold font-mono text-slate-300 text-xs uppercase tracking-wider">
-                        Select Allowed Teams
-                      </Label>
-                      <div className="flex flex-col gap-2.5">
-                        {Object.entries(TEAM_RADIO_CONFIGS).map(
-                          ([key, config]) => {
-                            const isChecked = selectedRadioSkins.includes(key);
-                            return (
-                              <div
-                                className="flex items-center gap-2.5"
-                                key={key}
-                              >
-                                <input
-                                  checked={isChecked}
-                                  className="h-4 w-4 cursor-pointer rounded border border-slate-800 bg-slate-955 text-[#DF0631] accent-[#DF0631] focus:ring-1 focus:ring-red-500"
-                                  id={`select-skin-${key}`}
-                                  onChange={(e) => {
-                                    let newSkins: string[];
-                                    if (e.target.checked) {
-                                      newSkins = [...selectedRadioSkins, key];
-                                    } else {
-                                      newSkins = selectedRadioSkins.filter(
-                                        (s) => s !== key
-                                      );
-                                    }
-                                    handleSelectedSkinsChange(newSkins);
-                                  }}
-                                  type="checkbox"
-                                />
-                                <Label
-                                  className="cursor-pointer select-none font-medium text-slate-300 text-sm hover:text-slate-150"
-                                  htmlFor={`select-skin-${key}`}
-                                >
-                                  {config.name}
-                                </Label>
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {/* Persistent Mode Toggle */}
-              <div className="mt-1 flex items-center gap-2">
-                <input
-                  checked={persistent}
-                  className="h-4 w-4 cursor-pointer rounded border border-slate-800 bg-slate-955 text-[#DF0631] accent-[#DF0631] focus:ring-1 focus:ring-red-500"
-                  id="persistent-toggle"
-                  onChange={(e) => setPersistent(e.target.checked)}
-                  type="checkbox"
-                />
-                <Label
-                  className="cursor-pointer select-none font-medium text-slate-400 text-xs hover:text-slate-200"
-                  htmlFor="persistent-toggle"
-                >
-                  Persistent Mode (keep alert visible for setup)
-                </Label>
-              </div>
-            </div>
-
-            {/* Step 3: Export buttons */}
-            <div className="flex flex-col gap-3 border-slate-800/60 border-t pt-4">
-              <div className="flex gap-3">
-                <Button
-                  className={`flex-1 rounded-lg py-2.5 font-extrabold text-xs uppercase tracking-wider transition-all active:scale-[0.98] ${
-                    copied
-                      ? "bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:bg-emerald-700"
-                      : "bg-[#DF0631] text-white shadow-[0_4px_12px_rgba(223,6,49,0.2)] hover:bg-[#c3052a]"
-                  }`}
-                  onClick={handleCopy}
-                >
-                  {copied ? "🏁 COPIED HTML!" : "📋 COPY HTML"}
-                </Button>
-
-                <Button
-                  className="flex-1 rounded-lg border border-slate-700 bg-slate-800/40 py-2.5 font-extrabold text-slate-200 text-xs uppercase tracking-wider transition-all hover:bg-slate-700 hover:text-white active:scale-[0.98]"
-                  onClick={handleTrigger}
-                >
-                  🔄 REPLAY PREVIEW
-                </Button>
-              </div>
-
-              <Button
-                className="border-slate-800 py-1.5 font-mono text-slate-400 text-xs uppercase tracking-wider hover:bg-slate-800/40 hover:text-slate-200"
-                onClick={() => setShowCode(!showCode)}
-                size="sm"
-                variant="outline"
-              >
-                {showCode
-                  ? "Hide Compiled Widget Code"
-                  : "Show Compiled Widget Code"}
-              </Button>
-            </div>
-
-            {/* Help instructions card */}
-            <QuickInstructionsCard botrixTab={botrixTabName} />
-          </div>
+          <ConfiguratorSidebar
+            allowsMessage={allowsMessage}
+            botrixTabName={botrixTabName}
+            dispatch={dispatch}
+            onCopy={handleCopy}
+            onTrigger={() => dispatch({ type: "TRIGGER_REPLAY" })}
+            state={state}
+          />
 
           {/* RIGHT: Viewport Column (col-span-8) */}
-          <div className="flex flex-col gap-4 lg:col-span-8 xl:col-span-9">
-            <AlertPreviewFeed
-              AlertComponent={AlertComponent}
-              bgColor={bgColor}
-              message={message}
-              name={name}
-              persistent={persistent}
-              radioTeam={activePreviewTeam}
-              selectedTemplate={selectedTemplate}
-              setBgColor={setBgColor}
-              setShowGrid={setShowGrid}
-              showGrid={showGrid}
-              text={text}
-              triggerKey={triggerKey}
-            />
-
-            {/* Code Inspection Area */}
-            {showCode && (
-              <div className="relative flex flex-col gap-3 rounded-xl border border-slate-850 bg-slate-955 p-4 shadow-inner">
-                <div className="flex items-center justify-between border-slate-900 border-b pb-2">
-                  <span className="font-bold font-mono text-slate-400 text-xs uppercase tracking-wider">
-                    Compiled HTML Export Block
-                  </span>
-                  <button
-                    className="font-bold font-mono text-[#DF0631] text-xs uppercase tracking-widest hover:text-red-400"
-                    onClick={handleCopy}
-                    type="button"
-                  >
-                    Copy Output
-                  </button>
-                </div>
-                <pre className="scrollbar-thin scrollbar-thumb-slate-800 max-h-[300px] overflow-x-auto rounded-lg border border-slate-900/80 bg-slate-900/60 p-3 font-mono text-slate-355 text-xs">
-                  <code>{compiledCode}</code>
-                </pre>
-              </div>
-            )}
-          </div>
+          <PreviewPanel
+            AlertComponent={AlertComponent}
+            compiledCode={compiledCode}
+            dispatch={dispatch}
+            onCopy={handleCopy}
+            state={state}
+          />
         </div>
       </div>
     </main>
