@@ -29,11 +29,6 @@ FollowerAlert.getBotrixHtml =
   ${fontLink}
   <style>${sharedStyles}</style>
 
-  <template id="botrix-data">
-    <span id="name-val">{name}</span>
-    <span id="text-val">{text}</span>
-  </template>
-
   <div class="f1-alert-banner">
     <div class="f1-alert-badge">
       <div class="f1-logo-content">
@@ -49,20 +44,17 @@ FollowerAlert.getBotrixHtml =
 
   <script>
     (function() {
-      const template = document.getElementById('botrix-data');
-      if (template) {
-        const nameVal = template.content.getElementById('name-val').textContent.trim();
-        const textVal = template.content.getElementById('text-val').textContent.trim();
-        
-        const headingEl = document.getElementById('alert-heading');
-        const detailEl = document.getElementById('alert-detail');
-        
-        if (headingEl) {
-          headingEl.textContent = 'RACE CONTROL: ' + nameVal.toUpperCase() + ' GRID ENTRY';
-        }
-        if (detailEl) {
-          detailEl.textContent = textVal.toUpperCase();
-        }
+      const nameVal = "{name}".replace(/\\\\([\\s\\S])/g, "$1").trim();
+      const textVal = "{text}".replace(/\\\\([\\s\\S])/g, "$1").trim();
+      
+      const headingEl = document.getElementById('alert-heading');
+      const detailEl = document.getElementById('alert-detail');
+      
+      if (headingEl) {
+        headingEl.textContent = 'RACE CONTROL: ' + nameVal.toUpperCase() + ' GRID ENTRY';
+      }
+      if (detailEl) {
+        detailEl.textContent = textVal.toUpperCase();
       }
     })();
   </script>

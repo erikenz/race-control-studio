@@ -2,14 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import {
-  FerrariRadioAlert,
-  ferrariRadioStyles,
-} from "@/components/alerts/ferrari-radio";
 import { FollowerAlert } from "@/components/alerts/follower-alert";
 import { GiftSubAlert } from "@/components/alerts/gift-sub-alert";
 import { HostAlert } from "@/components/alerts/host-alert";
 import { KickAlert } from "@/components/alerts/kick-alert";
+import { RadioAlert, radioAlertStyles } from "@/components/alerts/radio-alert";
 import {
   f1LogoSvg,
   GithubIcon,
@@ -20,6 +17,7 @@ import { TipAlert } from "@/components/alerts/tip-alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { TEAM_RADIO_CONFIGS } from "@/lib/radio-config";
 
 // biome-ignore lint/suspicious/noExplicitAny: alert components can be any React component type
 const alertComponents: Record<string, any> = {
@@ -160,6 +158,7 @@ interface AlertPreviewFeedProps {
   message: string;
   name: string;
   persistent: boolean;
+  radioTeam: string;
   selectedTemplate: string;
   setBgColor: (val: string) => void;
   setShowGrid: (val: boolean) => void;
@@ -180,6 +179,7 @@ function AlertPreviewFeed({
   text,
   message,
   persistent,
+  radioTeam,
 }: AlertPreviewFeedProps) {
   const bgClasses: Record<string, string> = {
     black: "bg-slate-955",
@@ -259,12 +259,12 @@ function AlertPreviewFeed({
             // biome-ignore lint/security/noDangerouslySetInnerHtml: static preview styles override
             dangerouslySetInnerHTML={{
               __html: `
-            .f1-alert-banner, .ferrari-radio-card {
+            .f1-alert-banner, .radio-card {
               animation: none !important;
               opacity: 1 !important;
               clip-path: polygon(0% 0%, 111% 0%, 100% 100%, -11% 100%) !important;
             }
-            .ferrari-radio-card {
+            .radio-card {
               clip-path: none !important;
             }
           `,
@@ -283,13 +283,14 @@ function AlertPreviewFeed({
                 </div>
               </div>
 
-              {/* Ferrari Radio Alert (Bottom Right) */}
+              {/* Radio Alert (Bottom Right) */}
               {showRadio && (
                 <div className="pointer-events-none absolute inset-0 flex items-end justify-end pr-[6%] pb-[6%]">
                   <div className="pointer-events-auto scale-[0.85] transform transition duration-300 sm:scale-100">
-                    <FerrariRadioAlert
+                    <RadioAlert
                       message={message}
                       name={name}
+                      team={radioTeam}
                       text={message}
                     />
                   </div>
@@ -303,7 +304,22 @@ function AlertPreviewFeed({
   );
 }
 
-function getCombinedBotrixHtml(template: string, persistent: boolean) {
+function getCombinedBotrixHtml(
+  template: string,
+  persistent: boolean,
+  radioTeam: string
+) {
+  const config = TEAM_RADIO_CONFIGS[radioTeam] || TEAM_RADIO_CONFIGS.ferrari;
+
+  const teamStyles = `
+    .radio-card {
+      --radio-bg: ${config.cssVars.bg};
+      --radio-primary: ${config.cssVars.primary};
+      --radio-wave: ${config.cssVars.wave};
+      --radio-accent: ${config.cssVars.accent};
+    }
+  `;
+
   return `<div class="container {disposition} {transition}">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Orbitron:wght@900&family=Inter:wght@400;550;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -314,9 +330,10 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
       ${persistent ? "opacity: 1 !important; clip-path: polygon(0% 0%, 111% 0%, 100% 100%, -11% 100%) !important;" : ""}
     }
     
-    ${ferrariRadioStyles}
+    ${radioAlertStyles}
+    ${teamStyles}
     
-    .ferrari-radio-card {
+    .radio-card {
       animation: ${persistent ? "none !important" : "f1PlayAlert 8s cubic-bezier(0.22, 1, 0.36, 1) forwards !important"};
       ${persistent ? "opacity: 1 !important; clip-path: none !important;" : ""}
     }
@@ -347,12 +364,6 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
     }
   </style>
 
-  <template id="botrix-data">
-    <span id="name-val">{name}</span>
-    <span id="text-val">{text}</span>
-    <span id="message-val">{message}</span>
-  </template>
-
   <div class="overlay-grid-container">
     <!-- Standard Alert Banner (Always displayed) -->
     <div id="standard-alert-wrap" class="standard-layout-wrapper">
@@ -369,11 +380,11 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
       </div>
     </div>
 
-    <!-- Ferrari Radio Alert Banner (Conditionally displayed via JS if {message} is filled) -->
+    <!-- Radio Alert Banner (Conditionally displayed via JS if {message} is filled) -->
     <div id="radio-alert-wrap" class="radio-layout-wrapper" style="display: none;">
-      <div class="ferrari-radio-card">
-        <div class="ferrari-card-header">
-          <div class="ferrari-header-bg">
+      <div class="radio-card radio-team-${config.id}">
+        <div class="radio-card-header">
+          <div class="radio-header-bg">
             <div class="cava-bar"></div>
             <div class="cava-bar"></div>
             <div class="cava-bar"></div>
@@ -385,36 +396,25 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
             <div class="cava-bar"></div>
             <div class="cava-bar"></div>
           </div>
-          <div class="ferrari-header-content">
-            <div class="ferrari-card-name-row">
-              <span class="ferrari-card-name" id="ferrari-name"></span>
+          <div class="radio-header-content">
+            <div class="radio-card-name-row">
+              <span class="radio-card-name" id="radio-name"></span>
             </div>
-            <div class="ferrari-header-bottom-row">
-              <div class="ferrari-card-number-wrapper">
-                <span class="ferrari-card-number">16</span>
+            <div class="radio-header-bottom-row">
+              <div class="radio-card-number-wrapper">
+                <span class="radio-card-number">${config.fallbackDriverNumber || "16"}</span>
               </div>
-              <div class="ferrari-header-right-bottom">
-                <span class="ferrari-card-radio">RADIO</span>
-                <div class="ferrari-card-shield-wrapper">
-                  <svg viewBox="0 0 100 120" class="ferrari-shield-svg">
-                    <title>Ferrari Shield</title>
-                    <path d="M10 10 C30 10 30 5 50 5 C70 5 70 10 90 10 C90 60 85 90 50 115 C15 90 10 60 10 10 Z" fill="#ffe100" stroke="#000000" stroke-width="3" />
-                    <path d="M11 11 C30 11 30 6 50 6 C70 6 70 11 89 11 L89 19 C70 19 70 14 50 14 C30 14 30 19 11 19 Z" fill="#000000" />
-                    <rect x="12" y="11" width="25" height="7" fill="#008f39" />
-                    <rect x="37" y="11" width="26" height="7" fill="#ffffff" />
-                    <rect x="63" y="11" width="25" height="7" fill="#e10600" />
-                    <path d="M48 25 C45 30 40 35 40 45 C40 55 45 60 48 65 C45 70 42 75 42 85 C45 90 48 90 52 90 C50 80 52 75 55 70 C58 75 60 85 62 85 C65 85 68 80 65 70 C60 65 58 55 58 45 C58 35 52 30 48 25 Z" fill="#000000" />
-                    <path d="M50 30 C51 32 52 35 51 38 C50 40 48 41 46 41 C48 42 50 43 49 46 C48 48 45 50 43 50 C45 52 48 55 48 58 C48 62 46 65 44 68 C47 70 50 73 50 78 C50 82 48 85 47 88 C49 88 52 87 53 84 C54 81 53 78 52 75 C54 77 56 80 57 83 C58 86 58 89 57 91 C59 90 61 88 61 85 C61 82 59 79 57 76 C59 75 61 74 62 72 C63 70 63 68 62 66 C60 67 58 68 56 68 C58 64 59 60 59 55 C59 48 56 42 52 37 C54 36 56 35 57 33 C56 31 54 30 52 30 C51 28 50 26 51 24 C50 25 49 26 49 27 C49 28 50 29 50 30 Z" fill="#000000" />
-                    <text x="32" y="107" font-family="sans-serif" font-size="12" font-weight="900" fill="#000000">S</text>
-                    <text x="56" y="107" font-family="sans-serif" font-size="12" font-weight="900" fill="#000000">F</text>
-                  </svg>
+              <div class="radio-header-right-bottom">
+                <span class="radio-card-radio">RADIO</span>
+                <div class="radio-card-shield-wrapper">
+                  ${config.shieldSvg}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="ferrari-card-body">
-          <p class="ferrari-message-text" id="ferrari-message"></p>
+        <div class="radio-card-body">
+          <p class="radio-message-text" id="radio-message"></p>
         </div>
       </div>
     </div>
@@ -422,60 +422,57 @@ function getCombinedBotrixHtml(template: string, persistent: boolean) {
 
   <script>
     (function() {
-      const template = document.getElementById('botrix-data');
-      if (template) {
-        const nameVal = template.content.getElementById('name-val').textContent.trim();
-        const textVal = template.content.getElementById('text-val').textContent.trim();
-        const msgVal = template.content.getElementById('message-val').textContent.trim();
-        
-        // Populate Standard Alert values safely
-        const headingEl = document.getElementById('alert-heading');
-        const detailEl = document.getElementById('alert-detail');
-        const templateType = "${template}";
-        
-        let headingText = "RACE CONTROL: " + nameVal.toUpperCase();
-        if (templateType === "subscription") {
-          headingText += " RENEWAL INCIDENT";
-        } else if (templateType === "tip-donate") {
-          headingText += " PIT STOP INCIDENT";
-        } else if (templateType === "kicks") {
-          headingText += " KICK INCIDENT";
-        } else {
-          headingText += " INCIDENT";
-        }
-        
-        if (headingEl) headingEl.textContent = headingText;
-        if (detailEl) detailEl.textContent = textVal.toUpperCase();
-        
-        // Check if custom message exists to show Ferrari Radio
-        const hasMessage = msgVal && 
-                           msgVal !== "{message}" && 
-                           msgVal.trim() !== "" && 
-                           msgVal.trim() !== '""' && 
-                           msgVal.trim() !== '\\"\\"' &&
-                           msgVal.replace(/RADIO:|📻/gi, "").replace(/['"\\s]/g, "") !== "";
+      const nameVal = "{name}".replace(/\\\\([\\s\\S])/g, "$1").trim();
+      const textVal = "{text}".replace(/\\\\([\\s\\S])/g, "$1").trim();
+      const msgVal = "{message}".replace(/\\\\([\\s\\S])/g, "$1").trim();
+      
+      // Populate Standard Alert values safely
+      const headingEl = document.getElementById('alert-heading');
+      const detailEl = document.getElementById('alert-detail');
+      const templateType = "${template}";
+      
+      let headingText = "RACE CONTROL: " + nameVal.toUpperCase();
+      if (templateType === "subscription") {
+        headingText += " RENEWAL INCIDENT";
+      } else if (templateType === "tip-donate") {
+        headingText += " PIT STOP INCIDENT";
+      } else if (templateType === "kicks") {
+        headingText += " KICK INCIDENT";
+      } else {
+        headingText += " INCIDENT";
+      }
+      
+      if (headingEl) headingEl.textContent = headingText;
+      if (detailEl) detailEl.textContent = textVal.toUpperCase();
+      
+      // Check if custom message exists to show Radio
+      const hasMessage = msgVal && 
+                         msgVal !== "{message}" && 
+                         msgVal.trim() !== "" && 
+                         msgVal.trim() !== '""' && 
+                         msgVal.trim() !== '\\\\"\\\\"' &&
+                         msgVal.replace(/RADIO:|📻/gi, "").replace(/['"\\\\s]/g, "") !== "";
 
-        const radioWrap = document.getElementById("radio-alert-wrap");
+      const radioWrap = document.getElementById("radio-alert-wrap");
 
-        if (hasMessage) {
-          if (radioWrap) radioWrap.style.display = "block";
-          
-          const nameEl = document.getElementById('ferrari-name');
-          const msgEl = document.getElementById('ferrari-message');
-          
-          if (nameEl) nameEl.textContent = nameVal.toUpperCase();
-          if (msgEl) msgEl.textContent = '"' + msgVal.replace(/^["']|["']$/g, '').trim() + '"';
-          
-          if (nameVal) {
-            const numMatch = nameVal.match(/\\d+$/);
-            if (numMatch) {
-              const numEl = document.querySelector('.ferrari-card-number');
-              if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
-            }
+      if (hasMessage) {
+        if (radioWrap) radioWrap.style.display = "block";
+        
+        const nameEl = document.getElementById('radio-name');
+        const msgEl = document.getElementById('radio-message');
+        
+        if (nameEl) nameEl.textContent = nameVal.toUpperCase();
+        if (msgEl) msgEl.textContent = '"' + msgVal.replace(/^["']|["']$/g, '').trim() + '"';
+        
+        if (nameVal) {
+          const numMatch = nameVal.match(/\\\\d+$/);
+          if (numMatch) {
+            const numEl = document.querySelector('.radio-card-number');
+            if (numEl) numEl.textContent = numMatch[0].slice(0, 2);
           }
-        } else {
-          if (radioWrap) radioWrap.style.display = "none";
         }
+      } else {
+        if (radioWrap) radioWrap.style.display = "none";
       }
     })();
   </script>
@@ -489,6 +486,7 @@ export default function AlertPreviewPage() {
   const [message, setMessage] = useState(
     "Staying with the team. 12 months completed!"
   );
+  const [radioTeam, setRadioTeam] = useState("ferrari");
   const [triggerKey, setTriggerKey] = useState(1);
   const [copied, setCopied] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
@@ -518,7 +516,7 @@ export default function AlertPreviewPage() {
       selectedTemplate
     );
     const code = allowsMessage
-      ? getCombinedBotrixHtml(selectedTemplate, persistent)
+      ? getCombinedBotrixHtml(selectedTemplate, persistent, radioTeam)
       : alertComponents[selectedTemplate].getBotrixHtml();
 
     let finalCode = code;
@@ -541,7 +539,7 @@ export default function AlertPreviewPage() {
 
   let rawCode = "";
   if (allowsMessage) {
-    rawCode = getCombinedBotrixHtml(selectedTemplate, persistent);
+    rawCode = getCombinedBotrixHtml(selectedTemplate, persistent, radioTeam);
   } else if (alertComponents[selectedTemplate]) {
     rawCode = alertComponents[selectedTemplate].getBotrixHtml();
   }
@@ -665,22 +663,47 @@ export default function AlertPreviewPage() {
 
               {/* Custom Message Input (Conditional) */}
               {allowsMessage && (
-                <div className="flex flex-col gap-1.5">
-                  <Label
-                    className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
-                    htmlFor="message-input"
-                  >
-                    Custom User Message (Radio Message)
-                  </Label>
-                  <Input
-                    className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
-                    id="message-input"
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="e.g. Staying with the team. 12 months completed!"
-                    type="text"
-                    value={message}
-                  />
-                </div>
+                <>
+                  <div className="flex flex-col gap-1.5">
+                    <Label
+                      className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
+                      htmlFor="message-input"
+                    >
+                      Custom User Message (Radio Message)
+                    </Label>
+                    <Input
+                      className="h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500"
+                      id="message-input"
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="e.g. Staying with the team. 12 months completed!"
+                      type="text"
+                      value={message}
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label
+                      className="font-bold font-mono text-slate-300 text-xs uppercase tracking-wider"
+                      htmlFor="radio-team-select"
+                    >
+                      Radio Team Skin
+                    </Label>
+                    <select
+                      className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
+                      id="radio-team-select"
+                      onChange={(e) => setRadioTeam(e.target.value)}
+                      value={radioTeam}
+                    >
+                      {Object.entries(TEAM_RADIO_CONFIGS).map(
+                        ([key, config]) => (
+                          <option key={key} value={key}>
+                            {config.name}
+                          </option>
+                        )
+                      )}
+                    </select>
+                  </div>
+                </>
               )}
 
               {/* Persistent Mode Toggle */}
@@ -747,6 +770,7 @@ export default function AlertPreviewPage() {
               message={message}
               name={name}
               persistent={persistent}
+              radioTeam={radioTeam}
               selectedTemplate={selectedTemplate}
               setBgColor={setBgColor}
               setShowGrid={setShowGrid}
