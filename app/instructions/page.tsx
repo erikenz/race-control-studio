@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { GithubIcon, sharedStyles } from "@/components/alerts/shared";
+
+export const metadata: Metadata = {
+  description:
+    "Import, customize, and deploy Race Control Studio F1 alert widgets in your Botrix streaming dashboard.",
+  title: "Botrix Setup Guide - Race Control Studio",
+};
 
 export default function InstructionsPage() {
   return (
@@ -42,8 +49,8 @@ export default function InstructionsPage() {
       </header>
 
       {/* Background design elements */}
-      <div className="pointer-events-none absolute top-0 right-0 h-[400px] w-[400px] rounded-full bg-[#e10600]/5 blur-[100px]" />
-      <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-blue-600/5 blur-[100px]" />
+      <div className="pointer-events-none absolute top-0 right-0 h-100 w-100 rounded-full bg-[#e10600]/5 blur-[100px]" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-100 w-100 rounded-full bg-blue-600/5 blur-[100px]" />
 
       {/* Content Container */}
       <div className="z-10 mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 lg:px-8">

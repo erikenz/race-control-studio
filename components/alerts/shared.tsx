@@ -1,27 +1,28 @@
 // biome-ignore-all lint/security/noDangerouslySetInnerHtml: static trusted SVG content
 
 export const fontLink =
-  '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">';
+  '<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Orbitron:wght@900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">';
 
 export const sharedStyles = `
     .container {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
       display: flex !important;
       justify-content: center !important;
       align-items: flex-start !important;
-      padding-top: 40px !important;
-      width: 100% !important;
-      height: 100% !important;
-      min-height: 100vh !important;
       background: transparent !important;
-      position: relative !important;
     }
 
     .f1-alert-banner {
       display: flex !important;
       align-items: stretch !important;
       width: max-content !important;
-      min-width: 450px !important;
+      min-width: 560px !important;
       max-width: 90vw !important;
+      margin-top: 40px !important;
       background: #0f2a44 !important;
       border-radius: 0px !important;
       overflow: hidden !important;
@@ -58,25 +59,25 @@ export const sharedStyles = `
       flex-direction: column !important;
       align-items: center !important;
       justify-content: center !important;
-      width: 56px !important;
+      width: 72px !important;
       background-color: #0f2a44 !important;
-      padding: 12px 4px 12px 16px !important;
+      padding: 16px 6px 16px 20px !important;
       flex-shrink: 0 !important;
-      gap: 6px !important;
+      gap: 8px !important;
     }
 
     .f1-logo-content {
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      height: 32px !important;
+      height: 44px !important;
     }
 
     .f1-alert-body {
       display: flex !important;
       flex-direction: column !important;
       flex-grow: 1 !important;
-      padding: 12px 20px 12px 12px !important;
+      padding: 16px 28px 16px 16px !important;
       justify-content: center !important;
       text-align: left !important;
       background-color: #0f2a44 !important;
@@ -85,7 +86,7 @@ export const sharedStyles = `
 
     .f1-heading-text {
       font-family: 'Inter', sans-serif !important;
-      font-size: 16px !important;
+      font-size: 22px !important;
       font-weight: 700 !important;
       color: #ffffff !important;
       margin: 0 !important;
@@ -99,7 +100,7 @@ export const sharedStyles = `
 
     .f1-detail-text {
       font-family: 'Inter', sans-serif !important;
-      font-size: 14px !important;
+      font-size: 18px !important;
       font-weight: 500 !important;
       color: #c7d2dd !important;
       margin: 2px 0 0 0 !important;
@@ -112,7 +113,7 @@ export const sharedStyles = `
     }
 `;
 
-export const f1LogoSvg = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="32" height="32" style="display: block;">
+export const f1LogoSvg = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="44" height="44" style="display: block;">
   <title>F1 Logo</title>
   <g transform="translate(0.000000,900.000000) scale(0.100000,-0.100000)" stroke="none">
     <polygon fill="#ffffff" points="5685,8549 5369,8608 5320,8603 5320,8603 4906,8485 4690,8385 4480,8288 4335,8223 4265,8189 4175,8147 4010,8073 3570,7870 3343,7764 3246,7720 3178,7689 3040,7625 2820,7525 2570,7410 1800,7055 1400,6873 1344,6839 1330,2175 1486,1753 2492,1355 2868,730 3128,467 3232,412 3455,334 4092,414 4333,525 4513,609 4600,649 4735,710 4870,773 5000,833 5180,915 5888,1241 5996,1290 6093,1334 6545,1543 6850,1683 7170,1830 7375,1924 7520,1991 7682,2104 7688,4469 7688,6795 7648,6895 7523,7151 7079,7495 6747,7559 6595,7541 6595,7541" />
@@ -125,18 +126,15 @@ export function F1Logo() {
   return (
     <div className="f1-logo-content">
       <svg
-        height="32"
+        height="44"
         style={{ display: "block" }}
         version="1.0"
         viewBox="0 0 900 900"
-        width="32"
+        width="44"
         xmlns="http://www.w3.org/2000/svg"
       >
         <title>F1 Logo</title>
-        <g
-          stroke="none"
-          transform="translate(0.000000,900.000000) scale(0.100000,-0.100000)"
-        >
+        <g stroke="none" transform="translate(0,900) scale(0.1,-0.1)">
           <polygon
             fill="#ffffff"
             points="5685,8549 5369,8608 5320,8603 5320,8603 4906,8485 4690,8385 4480,8288 4335,8223 4265,8189 4175,8147 4010,8073 3570,7870 3343,7764 3246,7720 3178,7689 3040,7625 2820,7525 2570,7410 1800,7055 1400,6873 1344,6839 1330,2175 1486,1753 2492,1355 2868,730 3128,467 3232,412 3455,334 4092,414 4333,525 4513,609 4600,649 4735,710 4870,773 5000,833 5180,915 5888,1241 5996,1290 6093,1334 6545,1543 6850,1683 7170,1830 7375,1924 7520,1991 7682,2104 7688,4469 7688,6795 7648,6895 7523,7151 7079,7495 6747,7559 6595,7541 6595,7541"

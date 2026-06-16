@@ -37,25 +37,8 @@ KickAlert.getBotrixHtml =
     </div>
 
     <div class="f1-alert-body">
-      <p class="f1-heading-text" id="alert-heading">RACE CONTROL: KICK INCIDENT</p>
-      <p class="f1-detail-text" id="alert-detail"></p>
+      <p class="f1-heading-text" id="alert-heading">RACE CONTROL: {name} KICK INCIDENT</p>
+      <p class="f1-detail-text" id="alert-detail">{text}</p>
     </div>
   </div>
-
-  <script>
-    (function() {
-      const nameVal = "{name}".replace(/\\\\([\\s\\S])/g, "$1").trim();
-      const textVal = "{text}".replace(/\\\\([\\s\\S])/g, "$1").trim();
-      
-      const headingEl = document.getElementById('alert-heading');
-      const detailEl = document.getElementById('alert-detail');
-      
-      if (headingEl) {
-        headingEl.textContent = 'RACE CONTROL: ' + nameVal.toUpperCase() + ' KICK INCIDENT';
-      }
-      if (detailEl) {
-        detailEl.textContent = textVal.toUpperCase();
-      }
-    })();
-  </script>
 </div>`;
