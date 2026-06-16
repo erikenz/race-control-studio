@@ -346,6 +346,21 @@ function getCombinedBotrixHtml(
   const defaultConfig =
     TEAM_RADIO_CONFIGS[defaultTeamKey] || TEAM_RADIO_CONFIGS.ferrari;
 
+  const serializedConfigs = Object.fromEntries(
+    Object.entries(TEAM_RADIO_CONFIGS).map(([key, cfg]) => [
+      key,
+      {
+        accent: cfg.cssVars.accent,
+        bg: cfg.cssVars.bg,
+        fallbackNumber: cfg.fallbackDriverNumber || "16",
+        id: cfg.id,
+        primary: cfg.cssVars.primary,
+        shieldSvg: cfg.shieldSvg.replace(/\n\s*/g, " ").trim(),
+        wave: cfg.cssVars.wave,
+      },
+    ])
+  );
+
   let headingSuffix = " INCIDENT";
   if (template === "subscription") {
     headingSuffix = " RENEWAL INCIDENT";
@@ -354,6 +369,9 @@ function getCombinedBotrixHtml(
   } else if (template === "kicks") {
     headingSuffix = " KICK INCIDENT";
   }
+
+  const configsJson = JSON.stringify(serializedConfigs);
+  const allowedJson = JSON.stringify(allowedTeams);
 
   const teamStyles = `
     .radio-card {
@@ -426,8 +444,26 @@ function getCombinedBotrixHtml(
       </div>
     </div>
 
-    <div id="radio-alert-wrap" class="radio-layout-wrapper" data-message="{message}">
-      <div class="radio-card radio-team-${defaultConfig.id}">
+    <div id="radio-alert-wrap" class="radio-layout-wrapper" data-message="{message}" data-configs='${configsJson}' data-allowed='${allowedJson}'>
+      <img src=x onerror="
+var w=this.parentNode,
+c=JSON.parse(w.getAttribute('data-configs')),
+a=JSON.parse(w.getAttribute('data-allowed')),
+t=a[Math.floor(Math.random()*a.length)],g=c[t],
+d=w.querySelector('.radio-card');
+d.style.setProperty('--radio-bg',g.bg);
+d.style.setProperty('--radio-primary',g.primary);
+d.style.setProperty('--radio-wave',g.wave);
+d.style.setProperty('--radio-accent',g.accent);
+d.className='radio-card radio-team-'+g.id;
+w.querySelector('.radio-card-shield-wrapper').innerHTML=g.shieldSvg;
+w.querySelector('.radio-card-number').textContent=g.fallbackNumber;
+var n=w.querySelector('.radio-card-name');
+if(n){var m=n.textContent.match(/\\d+$/);if(m)d.querySelector('.radio-card-number').textContent=m[0].slice(0,2);}
+ d.style.visibility='visible';
+ this.remove();
+" style="display:none" />
+      <div class="radio-card radio-team-${defaultConfig.id}" style="visibility:hidden">
         <div class="radio-card-header">
           <div class="radio-header-bg">
             <div class="cava-bar"></div>
