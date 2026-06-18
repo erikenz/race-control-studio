@@ -1,0 +1,12 @@
+{
+  "$schema": "https://react.doctor/schema/config.json",
+  "ignore": {
+    "files": ["components/ui/**"],
+    "overrides": [
+      {
+        "files": ["lib/utils.ts"],
+        "rules": ["deslop/unused-file"]
+      }
+    ]
+  }
+}
