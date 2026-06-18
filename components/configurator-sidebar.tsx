@@ -7,6 +7,17 @@ import { TEAM_RADIO_CONFIGS } from "@/lib/radio-config";
 import { PRESET_LABELS, PRESETS, useAppStore } from "@/lib/store";
 import { Trans, useTranslation } from "react-i18next";
 
+const codeTag = (key: string) => (
+  <code
+    className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]"
+    key={key}
+  />
+);
+
+const inlineCodeTag = (key: string) => (
+  <code className="font-mono text-[#DF0631]" key={key} />
+);
+
 function QuickPresetsDeck() {
   const activePreset = useAppStore((s) => s.activePreset);
   const loadPreset = useAppStore((s) => s.loadPreset);
@@ -48,32 +59,34 @@ function QuickInstructionsCard() {
         <li>{t("instructions.step1")}</li>
         <li>
           <Trans
-            components={[<strong className="text-slate-200" key="alerts" />]}
+            components={{
+              1: <strong className="text-slate-200" key="alerts" />,
+            }}
             i18nKey="instructions.step2"
           />
         </li>
         <li>
           <Trans
-            components={[<strong className="text-[#DF0631]" key="tab" />]}
+            components={{ 1: <strong className="text-[#DF0631]" key="tab" /> }}
             i18nKey="instructions.step3"
             values={{ tab: botrixTab }}
           />
         </li>
         <li>
           <Trans
-            components={[
-              <strong className="text-slate-200" key="custom-code" />,
-              <strong className="text-slate-200" key="html" />,
-            ]}
+            components={{
+              1: <strong className="text-slate-200" key="custom-code" />,
+              3: <strong className="text-slate-200" key="html" />,
+            }}
             i18nKey="instructions.step4"
           />
         </li>
         <li>
           <Trans
-            components={[
-              <strong className="text-slate-200" key="css" />,
-              <strong className="text-slate-200" key="js" />,
-            ]}
+            components={{
+              1: <strong className="text-slate-200" key="css" />,
+              3: <strong className="text-slate-200" key="js" />,
+            }}
             i18nKey="instructions.step5"
           />
         </li>
@@ -90,6 +103,7 @@ function BotrixVariablesSection() {
   const setName = useAppStore((s) => s.setName);
   const setText = useAppStore((s) => s.setText);
   const setMessage = useAppStore((s) => s.setMessage);
+  const { t } = useTranslation();
   const allowsMessage = ["subscription", "tip-donate", "kicks"].includes(
     selectedTemplate
   );
@@ -105,40 +119,35 @@ function BotrixVariablesSection() {
       <div className="flex items-center gap-2">
         <span className="h-2 w-2 rounded-full bg-[#DF0631]" />
         <span className="font-bold font-mono text-[11px] text-slate-400 uppercase tracking-widest">
-          Botrix Variables
+          {t("sidebar.sectionBotrix")}
         </span>
       </div>
       <p className="text-[11px] text-slate-500 leading-relaxed">
-        These fields receive values from Botrix. Use{" "}
-        <code className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]">
-          {"{name}"}
-        </code>
-        ,{" "}
-        <code className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]">
-          {"{text}"}
-        </code>
-        , and{" "}
-        <code className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]">
-          {"{message}"}
-        </code>{" "}
-        placeholders in the heading template below. Configuring these inside
-        Botrix means they update dynamically with each alert trigger.
+        <Trans
+          components={{
+            1: codeTag("1"),
+            2: codeTag("2"),
+            3: codeTag("3"),
+          }}
+          i18nKey="sidebar.sectionBotrixDesc"
+        />
       </p>
 
       <div className="flex flex-col gap-1.5">
         <Label className={labelClass} htmlFor="name-input">
-          Name
+          {t("sidebar.nameLabel")}
         </Label>
         <p className={descClass}>
-          Maps to the{" "}
-          <code className="font-mono text-[#DF0631]">{"{name}"}</code> Botrix
-          variable.
+          <Trans
+            components={{ 1: inlineCodeTag("1") }}
+            i18nKey="sidebar.nameDesc"
+          />
         </p>
         <Input
           className={inputClass}
           id="name-input"
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. LEWIS_44"
+          placeholder={t("sidebar.namePlaceholder")}
           type="text"
           value={name}
         />
@@ -146,18 +155,19 @@ function BotrixVariablesSection() {
 
       <div className="flex flex-col gap-1.5">
         <Label className={labelClass} htmlFor="text-input">
-          Alert Text
+          {t("sidebar.alertTextLabel")}
         </Label>
         <p className={descClass}>
-          Maps to the{" "}
-          <code className="font-mono text-[#DF0631]">{"{text}"}</code> Botrix
-          variable.
+          <Trans
+            components={{ 1: inlineCodeTag("1") }}
+            i18nKey="sidebar.alertTextDesc"
+          />
         </p>
         <Input
           className={inputClass}
           id="text-input"
           onChange={(e) => setText(e.target.value)}
-          placeholder="e.g. subscribed"
+          placeholder={t("sidebar.alertTextPlaceholder")}
           type="text"
           value={text}
         />
@@ -166,18 +176,19 @@ function BotrixVariablesSection() {
       {allowsMessage && (
         <div className="flex flex-col gap-1.5">
           <Label className={labelClass} htmlFor="message-input">
-            Custom User Message (Radio)
+            {t("sidebar.messageLabel")}
           </Label>
           <p className={descClass}>
-            Maps to the{" "}
-            <code className="font-mono text-[#DF0631]">{"{message}"}</code>{" "}
-            Botrix variable.
+            <Trans
+              components={{ 1: inlineCodeTag("1") }}
+              i18nKey="sidebar.messageDesc"
+            />
           </p>
           <Input
             className={inputClass}
             id="message-input"
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="e.g. Staying with the team. 12 months completed!"
+            placeholder={t("sidebar.messagePlaceholder")}
             type="text"
             value={message}
           />
@@ -199,6 +210,7 @@ function AlertContentsSection() {
   const setSpecificTeam = useAppStore((s) => s.setSpecificTeam);
   const setSelectedSkins = useAppStore((s) => s.setSelectedSkins);
   const setPersistent = useAppStore((s) => s.setPersistent);
+  const { t } = useTranslation();
   const allowsMessage = ["subscription", "tip-donate", "kicks"].includes(
     selectedTemplate
   );
@@ -214,42 +226,39 @@ function AlertContentsSection() {
       <div className="flex items-center gap-2">
         <span className="h-2 w-2 rounded-full bg-blue-500" />
         <span className="font-bold font-mono text-[11px] text-slate-400 uppercase tracking-widest">
-          Alert Contents
+          {t("sidebar.sectionContents")}
         </span>
       </div>
       <p className="text-[11px] text-slate-500 leading-relaxed">
-        Customize the heading text and radio card appearance. Use{" "}
-        <code className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]">
-          {"{name}"}
-        </code>
-        ,{" "}
-        <code className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]">
-          {"{text}"}
-        </code>
-        ,{" "}
-        <code className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]">
-          {"{message}"}
-        </code>{" "}
-        placeholders to reference the Botrix variables above. These are replaced
-        at preview time and in the generated HTML.
+        <Trans
+          components={{
+            1: codeTag("1"),
+            2: codeTag("2"),
+            3: codeTag("3"),
+          }}
+          i18nKey="sidebar.sectionContentsDesc"
+        />
       </p>
 
       <div className="flex flex-col gap-1.5">
         <Label className={labelClass} htmlFor="heading-template-input">
-          Heading Template
+          {t("sidebar.headingTemplateLabel")}
         </Label>
         <p className={descClass}>
-          The first line of the alert banner. Use{" "}
-          <code className="font-mono text-[#DF0631]">{"{name}"}</code>,{" "}
-          <code className="font-mono text-[#DF0631]">{"{text}"}</code>, and{" "}
-          <code className="font-mono text-[#DF0631]">{"{message}"}</code>{" "}
-          placeholders.
+          <Trans
+            components={{
+              1: inlineCodeTag("1"),
+              2: inlineCodeTag("2"),
+              3: inlineCodeTag("3"),
+            }}
+            i18nKey="sidebar.headingTemplateDesc"
+          />
         </p>
         <Input
           className={inputClass}
           id="heading-template-input"
           onChange={(e) => setHeadingTemplate(e.target.value)}
-          placeholder="RACE CONTROL: {name} RENEWAL INCIDENT"
+          placeholder={t("sidebar.headingTemplatePlaceholder")}
           type="text"
           value={headingTemplate}
         />
@@ -258,10 +267,8 @@ function AlertContentsSection() {
       {allowsMessage && (
         <>
           <div className="flex flex-col gap-1.5">
-            <Label className={labelClass}>Radio Skin Mode</Label>
-            <p className={descClass}>
-              Controls the radio card skin in the bottom-right corner.
-            </p>
+            <Label className={labelClass}>{t("sidebar.radioSkinLabel")}</Label>
+            <p className={descClass}>{t("sidebar.radioSkinDesc")}</p>
             <select
               className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
               onChange={(e) => {
@@ -276,20 +283,22 @@ function AlertContentsSection() {
               }}
               value={radioSkinMode}
             >
-              <option value="specific">Specific Team</option>
-              <option value="random-all">Random (All Teams)</option>
-              <option value="random-selected">Random (Selected Teams)</option>
+              <option value="specific">{t("sidebar.radioSkinSpecific")}</option>
+              <option value="random-all">
+                {t("sidebar.radioSkinRandomAll")}
+              </option>
+              <option value="random-selected">
+                {t("sidebar.radioSkinRandomSelected")}
+              </option>
             </select>
           </div>
 
           {radioSkinMode === "specific" && (
             <div className="flex animate-fadeIn flex-col gap-1.5">
               <Label className={labelClass} htmlFor="radio-team-select">
-                Team Skin
+                {t("sidebar.teamSkinLabel")}
               </Label>
-              <p className={descClass}>
-                The team whose colors, shield, and number appear on the card.
-              </p>
+              <p className={descClass}>{t("sidebar.teamSkinDesc")}</p>
               <select
                 className="h-9 rounded-lg border border-slate-800 bg-slate-955 px-3 text-slate-100 text-sm hover:border-slate-700 focus:outline-none focus:ring-1 focus:ring-red-500"
                 id="radio-team-select"
@@ -308,11 +317,9 @@ function AlertContentsSection() {
           {radioSkinMode === "random-selected" && (
             <div className="flex animate-fadeIn flex-col gap-2 rounded-lg border border-slate-800/80 bg-slate-900/30 p-3">
               <Label className="mb-1 font-bold font-mono text-slate-300 text-xs uppercase tracking-wider">
-                Allowed Teams
+                {t("sidebar.allowedTeamsLabel")}
               </Label>
-              <p className={descClass}>
-                Only checked teams are used when picking a random skin.
-              </p>
+              <p className={descClass}>{t("sidebar.allowedTeamsDesc")}</p>
               <div className="flex flex-col gap-2.5">
                 {Object.entries(TEAM_RADIO_CONFIGS).map(([key, config]) => {
                   const isChecked = selectedRadioSkins.includes(key);
@@ -353,7 +360,12 @@ function AlertContentsSection() {
 
       <div className="flex items-center gap-2">
         <input
-          aria-label="Persistent Mode (keep alert visible for setup)"
+          aria-label={
+            t("sidebar.persistentLabel") +
+            " (" +
+            t("sidebar.persistentDesc") +
+            ")"
+          }
           checked={persistent}
           className="h-4 w-4 cursor-pointer rounded border border-slate-800 bg-slate-955 text-[#DF0631] accent-[#DF0631] focus:ring-1 focus:ring-red-500"
           id="persistent-toggle"
@@ -365,11 +377,10 @@ function AlertContentsSection() {
             className="cursor-pointer select-none font-medium text-slate-400 text-xs hover:text-slate-200"
             htmlFor="persistent-toggle"
           >
-            Persistent Mode
+            {t("sidebar.persistentLabel")}
           </Label>
           <span className="text-[10px] text-slate-500">
-            Keeps the alert visible without animating out, useful for
-            positioning and alignment in OBS.
+            {t("sidebar.persistentDesc")}
           </span>
         </div>
       </div>
@@ -387,6 +398,7 @@ function ExportSection({
   const copied = useAppStore((s) => s.copied);
   const showCode = useAppStore((s) => s.showCode);
   const setShowCode = useAppStore((s) => s.setShowCode);
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-3 border-slate-800/60 border-t pt-4">
@@ -399,14 +411,14 @@ function ExportSection({
           }`}
           onClick={onCopyAction}
         >
-          {copied ? "🏁 COPIED HTML!" : "📋 COPY HTML"}
+          {copied ? t("sidebar.copiedHtml") : t("sidebar.copyHtml")}
         </Button>
 
         <Button
           className="flex-1 rounded-lg border border-slate-700 bg-slate-800/40 py-2.5 font-extrabold text-slate-200 text-xs uppercase tracking-wider transition-all hover:bg-slate-700 hover:text-white active:scale-[0.98]"
           onClick={onTriggerAction}
         >
-          🔄 REPLAY PREVIEW
+          {t("sidebar.replayPreview")}
         </Button>
       </div>
 
@@ -416,7 +428,7 @@ function ExportSection({
         size="sm"
         variant="outline"
       >
-        {showCode ? "Hide Compiled Widget Code" : "Show Compiled Widget Code"}
+        {showCode ? t("sidebar.hideCode") : t("sidebar.showCode")}
       </Button>
     </div>
   );
@@ -429,20 +441,21 @@ export function ConfiguratorSidebar({
   onCopyAction: () => void;
   onTriggerAction: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="relative flex flex-col gap-5 overflow-y-auto rounded-xl border border-slate-800/85 bg-slate-900/40 p-5 shadow-2xl backdrop-blur-md md:p-6 lg:sticky lg:top-4 lg:col-span-4 lg:max-h-[calc(100dvh-5.5rem)] xl:col-span-3">
       <div className="absolute top-0 left-6 h-0.75 w-24 bg-[#e10600]" />
 
-      <h2 className="flex items-center justify-between border-slate-800/60 border-b pb-3 font-extrabold text-lg uppercase tracking-wide">
-        <span>Alert Configurator</span>
+      <h2 className="flex flex-wrap items-center justify-between gap-2 border-slate-800/60 border-b pb-3 font-extrabold text-lg uppercase tracking-wide">
+        <span>{t("sidebar.title")}</span>
         <span className="rounded bg-red-500/10 px-2 py-0.5 font-mono font-semibold text-red-500 text-xs">
-          FORMULA-1
+          {t("sidebar.badge")}
         </span>
       </h2>
 
       <div className="flex flex-col gap-2">
         <Label className="font-bold font-mono text-slate-400 text-xs uppercase tracking-wider">
-          Test Alerts Presets
+          {t("sidebar.testPresets")}
         </Label>
         <QuickPresetsDeck />
       </div>

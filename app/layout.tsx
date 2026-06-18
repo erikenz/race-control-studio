@@ -6,6 +6,7 @@ import {
   Montserrat,
   Orbitron,
 } from "next/font/google";
+import { LangSetter } from "@/components/lang-setter";
 import "./globals.css";
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
@@ -57,7 +58,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${montserrat.variable} ${orbitron.variable}`}
       lang="en"
     >
-      <body className="font-sans antialiased">{children}</body>
+      <body className="font-sans antialiased">
+        <LangSetter />
+        {children}
+      </body>
     </html>
   );
 }

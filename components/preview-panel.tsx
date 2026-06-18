@@ -45,7 +45,7 @@ function AlertPreviewFeed({
         <div className="flex flex-wrap items-center gap-4">
           {/* Background Selector */}
           <div className="flex flex-wrap items-center gap-1 rounded-lg border border-slate-800 bg-slate-955 p-0.5">
-            {["chroma", "grid", "black"].map((bg) => (
+            {(["chroma", "grid", "black"] as const).map((bg) => (
               <button
                 className={`rounded px-2.5 py-1 font-bold font-mono text-[10px] uppercase transition ${
                   bgColor === bg
@@ -56,7 +56,9 @@ function AlertPreviewFeed({
                 onClick={() => setBgColor(bg)}
                 type="button"
               >
-                {bg}
+                {t(
+                  `preview.bg${bg.charAt(0).toUpperCase() + bg.slice(1)}` as const
+                )}
               </button>
             ))}
           </div>
