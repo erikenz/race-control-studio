@@ -9,3 +9,9 @@ node_modules
 .next/
 out/
 .DS_Store
+
+.playwright-mcp
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

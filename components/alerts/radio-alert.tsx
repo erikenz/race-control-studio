@@ -235,6 +235,327 @@ function FerrariShield() {
   );
 }
 
+function MercedesShieldDefs() {
+  return (
+    <defs>
+      <linearGradient
+        gradientTransform="matrix(48,40.2,-40.2,48,8,11.9)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear1"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#fff" />
+        <stop offset={0.1} stopColor="#e7e8e6" />
+        <stop offset={0.1} stopColor="#cdd0d0" />
+        <stop offset={0.2} stopColor="#b5bbbd" />
+        <stop offset={0.2} stopColor="#a5acaf" />
+        <stop offset={0.3} stopColor="#9ba3a7" />
+        <stop offset={0.3} stopColor="#98a0a4" />
+        <stop offset={0.4} stopColor="#828a8f" />
+        <stop offset={0.5} stopColor="#667075" />
+        <stop offset={0.6} stopColor="#535c63" />
+        <stop offset={0.7} stopColor="#475158" />
+        <stop offset={0.8} stopColor="#434d54" />
+        <stop offset={1} stopColor="#475157" />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(45,37.8,-37.8,45,9.5,13.1)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear2"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#0b1f2a" />
+        <stop offset={0.2} stopColor="#333f47" />
+        <stop offset={0.5} stopColor="#777f84" />
+        <stop offset={0.5} stopColor="#81898d" />
+        <stop offset={0.7} stopColor="#b3b8b8" />
+        <stop offset={0.8} stopColor="#d2d5d3" />
+        <stop offset={0.8} stopColor="#dee0dd" />
+        <stop offset={1} stopColor="#fbfbfb" />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-21.9 -60.2 60.2 -21.9 42.97 62.11)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear3"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#e1e3e1" stopOpacity={0.4} />
+        <stop offset={0.1} stopColor="#c1c5c4" stopOpacity={0.4} />
+        <stop offset={0.3} stopColor="#9ba1a2" stopOpacity={0.4} />
+        <stop offset={0.5} stopColor="#7d8487" stopOpacity={0.4} />
+        <stop offset={0.7} stopColor="#687074" stopOpacity={0} />
+        <stop offset={0.8} stopColor="#5b6469" stopOpacity={0} />
+        <stop offset={1} stopColor="#576065" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(27.6,47.8,-47.8,27.6,18.2,8.1)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear4"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#e1e3e1" stopOpacity={0.4} />
+        <stop offset={0.1} stopColor="#c1c5c4" stopOpacity={0.4} />
+        <stop offset={0.3} stopColor="#9ba1a2" stopOpacity={0.4} />
+        <stop offset={0.5} stopColor="#7d8487" stopOpacity={0.4} />
+        <stop offset={0.7} stopColor="#687074" stopOpacity={0} />
+        <stop offset={0.8} stopColor="#5b6469" stopOpacity={0} />
+        <stop offset={1} stopColor="#576065" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-1.7,2.8,-2.8,-1.7,44.5,39.4)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear5"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#27343c" />
+        <stop offset={1} stopColor="#00111e" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-2.8,-4.5,4.5,-2.8,39.6,29.1)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear6"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#02131f" />
+        <stop offset={0.1} stopColor="#02131f" />
+        <stop offset={0.9} stopColor="#02131f" stopOpacity={0} />
+        <stop offset={1} stopColor="#02131f" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-4.2,1.2,-1.2,-4.2,32,36.4)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear7"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#02131f" stopOpacity={0.8} />
+        <stop offset={0.2} stopColor="#02131f" stopOpacity={0.8} />
+        <stop offset={0.9} stopColor="#02131f" stopOpacity={0} />
+        <stop offset={1} stopColor="#02131f" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-.6 -1.5 1.5 -.6 20.8 41.9)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear8"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#02131f" stopOpacity={0.8} />
+        <stop offset={0.1} stopColor="#02131f" stopOpacity={0.8} />
+        <stop offset={1} stopColor="#02131f" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-3.4 .4 -.4 -3.4 35.6 17.2)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear9"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#02131f" />
+        <stop offset={0.3} stopColor="#02131f" />
+        <stop offset={0.8} stopColor="#02131f" stopOpacity={0} />
+        <stop offset={1} stopColor="#02131f" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-2.3 .3 -.3 -2.3 35.7 17.1)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear10"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#27343c" />
+        <stop offset={0.4} stopColor="#27343c" />
+        <stop offset={1} stopColor="#3b474e" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(27.9 16.1 -16.1 27.9 -.4 32.9)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear11"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#24303a" stopOpacity={0} />
+        <stop offset="0" stopColor="#25323b" stopOpacity={0} />
+        <stop offset={0.1} stopColor="#27343c" />
+        <stop offset={1} stopColor="#27343c" />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(0,-4.8,4.8,0,32,37.4)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear12"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#a5abaf" />
+        <stop offset={0.3} stopColor="#a5abaf" />
+        <stop offset={1} stopColor="#a5abaf" stopOpacity={0} />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(0,61,-61,0,47.7,2.3)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear13"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#dee0dd" />
+        <stop offset="0" stopColor="#c5c9c7" />
+        <stop offset="0" stopColor="#9ea4a5" />
+        <stop offset="0" stopColor="#82898c" />
+        <stop offset="0" stopColor="#71797d" />
+        <stop offset="0" stopColor="#6b7378" />
+        <stop offset={0.2} stopColor="#333f47" />
+        <stop offset={0.5} stopColor="#27343c" />
+        <stop offset={0.8} stopColor="#333f47" />
+        <stop offset={1} stopColor="#434d54" />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(2e-6 0 0 2e-6 32.1 .7)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear14"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#dee0dd" />
+        <stop offset="0" stopColor="#c5c9c7" />
+        <stop offset="0" stopColor="#9ea4a5" />
+        <stop offset="0" stopColor="#82898c" />
+        <stop offset="0" stopColor="#71797d" />
+        <stop offset="0" stopColor="#6b7378" />
+        <stop offset={0.2} stopColor="#333f47" />
+        <stop offset={0.5} stopColor="#27343c" />
+        <stop offset={0.8} stopColor="#333f47" />
+        <stop offset={1} stopColor="#434d54" />
+      </linearGradient>
+      <linearGradient
+        gradientTransform="matrix(-13.5,19.8,-19.8,-13.5,57.3,8.1)"
+        gradientUnits="userSpaceOnUse"
+        id="_Linear15"
+        x2="1"
+      >
+        <stop offset="0" stopColor="#27343c" />
+        <stop offset={0.7} stopColor="#27343c" />
+        <stop offset={0.7} stopColor="#2b373f" />
+        <stop offset={0.7} stopColor="#36424a" />
+        <stop offset={0.7} stopColor="#49545b" />
+        <stop offset={0.8} stopColor="#646d73" stopOpacity={0} />
+        <stop offset={0.8} stopColor="#868d92" stopOpacity={0} />
+        <stop offset={0.8} stopColor="#b0b5b8" stopOpacity={0} />
+        <stop offset={0.8} stopColor="#e1e3e4" stopOpacity={0} />
+        <stop offset={0.8} stopColor="#fff" stopOpacity={0} />
+        <stop offset={1} stopColor="#fff" stopOpacity={0} />
+      </linearGradient>
+    </defs>
+  );
+}
+
+function MercedesShieldPaths() {
+  return (
+    <g transform="matrix(1.74 0 0 1.74 56.09 55.73)">
+      <g transform="translate(-32,-32)">
+        <g fillRule="nonzero">
+          <path
+            d="m63.3 32c0 17.3-14 31.3-31.3 31.3s-31.3-14-31.3-31.3 14-31.3 31.3-31.3 31.3 14 31.3 31.3zm-31.3-29.4c-16.3 0-29.4 13.1-29.4 29.4s13.2 29.4 29.4 29.4c16.3 0 29.4-13.2 29.4-29.4 0-16.3-13.1-29.4-29.4-29.4z"
+            fill="url(#_Linear1)"
+            id="outer_24_"
+          />
+          <path
+            d="m32 2.6c-16.3 0-29.4 13.1-29.4 29.4s13.2 29.4 29.4 29.4c16.3 0 29.4-13.2 29.4-29.4 0-16.3-13.1-29.4-29.4-29.4zm0 56.9c-15.2 0-27.5-12.3-27.5-27.5s12.3-27.5 27.5-27.5 27.5 12.3 27.5 27.5-12.3 27.5-27.5 27.5z"
+            fill="url(#_Linear2)"
+          />
+          <path
+            d="m32 63.3c17.3 0 31.3-14 31.3-31.3s-14-31.3-31.3-31.3-31.3 14-31.3 31.3 14 31.3 31.3 31.3zm0-63.3c17.6 0 32 14.4 32 32s-14.4 32-32 32-32-14.4-32-32 14.4-32 32-32z"
+            fill="url(#_Linear3)"
+          />
+          <path
+            d="m2.2 32.1c0-16.4 13.3-29.9 29.8-29.9s29.8 13.4 29.8 29.9c0 16.4-13.3 29.7-29.8 29.7s-29.8-13.3-29.8-29.7zm9.3-20.6c-5.3 5.3-8.6 12.6-8.6 20.6s3.3 15.3 8.5 20.5c5.3 5.2 12.6 8.5 20.6 8.5s15.3-3.2 20.5-8.5c5.3-5.2 8.5-12.5 8.5-20.5s-3.3-15.3-8.5-20.6-12.5-8.6-20.5-8.6-15.3 3.3-20.5 8.6z"
+            fill="#fff"
+          />
+          <path
+            d="m32 59.6c-7.4 0-14.3-2.9-19.5-8.1s-8.1-12.1-8.1-19.5 2.9-14.3 8.1-19.5 12.1-8.1 19.5-8.1 14.3 2.9 19.5 8.1 8.1 12.1 8.1 19.5-2.9 14.3-8.1 19.5-12.1 8.1-19.5 8.1zm0-0.8c7.1 0 13.9-2.8 18.9-7.8 5.1-5.1 7.8-11.8 7.8-18.9s-2.8-13.9-7.8-18.9c-5.1-5.1-11.8-7.8-18.9-7.8s-13.9 2.8-18.9 7.8c-5.1 4.9-7.9 11.7-7.9 18.8s2.8 13.9 7.8 18.9c5.1 5.1 11.9 7.9 19 7.9z"
+            fill="url(#_Linear4)"
+          />
+          <path
+            d="m56.3 45c-0.5-0.4-19.8-15.7-19.8-15.7l-4.5-25.7c-0.3 0.1-0.7 0.4-0.9 0.8l-3.2 25-19.9 15.3s-0.4 0.5-0.6 0.8c-0.1 0.2-0.1 0.5-0.1 0.8l24.6-10.1 24.6 10.1c0.2-0.5 0-1-0.2-1.3z"
+            fill="#fff"
+          />
+          <path
+            d="m32.2 32.8-0.2 4.6 22.6 9.1c0.8 0.4 1.4 0.2 2-0.2l-24.1-13.6c-0.1-0.1-0.3 0-0.3 0.1z"
+            fill="#565f64"
+          />
+          <path
+            d="m32.2 32.8s1.3 2.3 2.8 3.9c2.1 2.3 4.9 3.9 4.9 3.9l14.7 5.9c0.8 0.4 1.4 0.2 2-0.2l-24.1-13.6c-0.1-0.1-0.3 0-0.3 0.1z"
+            fill="url(#_Linear5)"
+          />
+          <path
+            d="m56.5 45.4c0-0.1-0.1-0.2-0.2-0.4l-20.6-15.1-2.8 1.8s0.2 0.1 0.3 0c0.3-0.1 0.9-0.2 1.5 0 0.5 0.2 21.8 13.8 21.8 13.8z"
+            fill="#a4aaae"
+            fillOpacity={0.6}
+          />
+          <path
+            d="m55.8 44.5-19.2-15.2-0.9 0.6 20.6 15.2c-0.1-0.2-0.3-0.4-0.5-0.6z"
+            fill="#333e46"
+          />
+          <path
+            d="m32.5 31.3-0.1 0.1s0 0.2 0.2 0.1c0.1-0.1 3-1.6 4-2.2l-3.5-24c-0.1-0.9-0.5-1.3-1.2-1.6l0.4 27.8z"
+            fill="#565f64"
+          />
+          <path
+            d="m30.8 5.3v1.3l-2.2 22.1c0 0.3 0.1 0.6 0.4 0.8l1.3 1 0.9-24.4 0.1-1.9c-0.3 0.2-0.4 0.6-0.5 1.1z"
+            fill="#a4aaae"
+            fillOpacity={0.6}
+          />
+          <path
+            d="m29.6 30.9-1.2-1-20.3 14.7s-0.6 0.4-0.7 0.8l0.7-0.4 21.3-13.4c0.4-0.2 0.5-0.4 0.2-0.7z"
+            fill="#a4aaae"
+            fillOpacity={0.6}
+          />
+          <path
+            d="m31.7 32.8c0-0.1-0.1-0.2-0.2-0.1l-24.2 13.7c0.6 0.4 1.2 0.5 2 0.2l22.6-9.1z"
+            fill="#565f64"
+          />
+          <path
+            d="m32.4 31.4 0.1-0.1-0.1 0.1s0 0.1 0.1 0.1h0.1c0.1-0.1 3-1.6 4-2.2l-0.4-2.9-3.1-21.1c0-0.4-0.1-0.7-0.3-0.9 0 0 1.5 20.2 1.5 22.4 0 2.9-1.9 4.6-1.9 4.6z"
+            fill="url(#_Linear6)"
+          />
+          <path
+            d="m31.7 32.8c0-0.1-0.1-0.2-0.2-0.1l-24.2 13.7c0.6 0.4 1.2 0.5 2 0.2l22.6-9.1z"
+            fill="url(#_Linear7)"
+          />
+          <path
+            d="m9.3 46.5 22.6-9.1-0.2-4.4c-0.4 1.2-1.1 2.5-3 3.5-1.4 0.8-14.8 7.4-19.6 9.7-0.3 0.2-0.7 0.3-0.9 0.4 0.4 0.2 0.7 0.1 1.1-0.1z"
+            fill="url(#_Linear8)"
+          />
+          <path
+            d="m32.5 31.3-0.1 0.1s0 0.2 0.2 0.1c0.1-0.1 3-1.6 4-2.2l-3.5-24c-0.1-0.9-0.5-1.3-1.2-1.6l0.4 27.8z"
+            fill="url(#_Linear9)"
+          />
+          <path
+            d="m32.5 31.3-0.1 0.1s0 0.2 0.2 0.1c0.1-0.1 3-1.6 4-2.2l-3.5-24c-0.1-0.9-0.5-1.3-1.2-1.6l0.4 27.8z"
+            fill="url(#_Linear10)"
+          />
+          <path
+            d="m5.1 44.4c-0.7-1.6-4.7-9.4-0.3-24.4h-1.7c-0.9 3-1.6 4.8-2 7.5 0 0-0.2 1-0.3 2.1s-0.1 1.7-0.1 2.4c0 6 1.5 9.5 1.5 9.5 1.6 5 4.4 9.5 8.2 12.9 3.3 2.9 8.4 5.1 12.6 5.9-0.7-0.1-12.7-5.2-17.9-15.9z"
+            fill="url(#_Linear11)"
+          />
+          <path
+            d="m32.4 32.6h-0.9c0.1 0 0.2 0 0.2 0.1l0.2 4.6h0.1l0.2-4.6c0-0.1 0.1-0.2 0.2-0.1z"
+            fill="url(#_Linear12)"
+          />
+          <path
+            d="m42 2.3c10.5 4 20.4 15 20.4 28.9 0 16.8-13.4 30.5-30.4 30.5v1.6c17 0 31.3-14 31.3-31.3 0-13.8-8.8-25.4-21.3-29.7z"
+            fill="url(#_Linear13)"
+          />
+          <path d="m32.3 0.7h-0.3z" fill="url(#_Linear14)" />
+          <path
+            d="m58.8 20.2c-7-16.1-22.8-17-23.7-17.1h-0.1c12.1 2.2 19.8 10.1 22.5 18.4v0.1c1.2 3.2 1.8 6.6 1.9 10.3 0.1 3.5-0.7 7.4-2.2 11-0.1 0.5-0.2 1.1-0.3 1.1h1.6c4.8-9 2.7-18.1 0.3-23.8z"
+            fill="url(#_Linear15)"
+          />
+          <path
+            d="m2.2 32.1c0-16.4 13.3-29.9 29.8-29.9s29.8 13.4 29.8 29.9c0 16.4-13.3 29.7-29.8 29.7s-29.8-13.3-29.8-29.7zm9.3-20.6c-5.3 5.3-8.6 12.6-8.6 20.6s3.3 15.3 8.5 20.5c5.3 5.2 12.6 8.5 20.6 8.5s15.3-3.2 20.5-8.5c5.3-5.2 8.5-12.5 8.5-20.5s-3.3-15.3-8.5-20.6-12.5-8.6-20.5-8.6-15.3 3.3-20.5 8.6z"
+            fill="#fbfbfb"
+          />
+          <path
+            d="m7.9 44.8 20.4-14.7c1.1 0.6 2.9 1.4 3.1 1.4 0.2 0.1 0.2-0.1 0.2-0.1l-2.5-2.1c-0.3-0.2-0.4-0.5-0.4-0.8l2.4-24.1c-0.1 0.1-0.1 0.3-0.2 0.4-0.1 0.2-0.1 0.3-0.1 0.5l-3.5 24.1-19.2 15.1c-0.1 0.1-0.2 0.2-0.2 0.3z"
+            fill="#333f47"
+          />
+        </g>
+      </g>
+    </g>
+  );
+}
+
 function MercedesShield() {
   return (
     <svg
@@ -247,317 +568,8 @@ function MercedesShield() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <title>Mercedes Shield</title>
-      <g transform="matrix(1.7396 0 0 1.7396 56.085 55.726)">
-        <g transform="translate(-32,-32)">
-          <g fillRule="nonzero">
-            <path
-              d="m63.3 32c0 17.3-14 31.3-31.3 31.3s-31.3-14-31.3-31.3 14-31.3 31.3-31.3 31.3 14 31.3 31.3zm-31.3-29.4c-16.3 0-29.4 13.1-29.4 29.4s13.2 29.4 29.4 29.4c16.3 0 29.4-13.2 29.4-29.4 0-16.3-13.1-29.4-29.4-29.4z"
-              fill="url(#_Linear1)"
-              id="outer_24_"
-            />
-            <path
-              d="m32 2.6c-16.3 0-29.4 13.1-29.4 29.4s13.2 29.4 29.4 29.4c16.3 0 29.4-13.2 29.4-29.4 0-16.3-13.1-29.4-29.4-29.4zm0 56.9c-15.2 0-27.5-12.3-27.5-27.5s12.3-27.5 27.5-27.5 27.5 12.3 27.5 27.5-12.3 27.5-27.5 27.5z"
-              fill="url(#_Linear2)"
-            />
-            <path
-              d="m32 63.3c17.3 0 31.3-14 31.3-31.3s-14-31.3-31.3-31.3-31.3 14-31.3 31.3 14 31.3 31.3 31.3zm0-63.3c17.6 0 32 14.4 32 32s-14.4 32-32 32-32-14.4-32-32 14.4-32 32-32z"
-              fill="url(#_Linear3)"
-            />
-            <path
-              d="m2.2 32.1c0-16.4 13.3-29.9 29.8-29.9s29.8 13.4 29.8 29.9c0 16.4-13.3 29.7-29.8 29.7s-29.8-13.3-29.8-29.7zm9.3-20.6c-5.3 5.3-8.6 12.6-8.6 20.6s3.3 15.3 8.5 20.5c5.3 5.2 12.6 8.5 20.6 8.5s15.3-3.2 20.5-8.5c5.3-5.2 8.5-12.5 8.5-20.5s-3.3-15.3-8.5-20.6-12.5-8.6-20.5-8.6-15.3 3.3-20.5 8.6z"
-              fill="#fff"
-            />
-            <path
-              d="m32 59.6c-7.4 0-14.3-2.9-19.5-8.1s-8.1-12.1-8.1-19.5 2.9-14.3 8.1-19.5 12.1-8.1 19.5-8.1 14.3 2.9 19.5 8.1 8.1 12.1 8.1 19.5-2.9 14.3-8.1 19.5-12.1 8.1-19.5 8.1zm0-0.8c7.1 0 13.9-2.8 18.9-7.8 5.1-5.1 7.8-11.8 7.8-18.9s-2.8-13.9-7.8-18.9c-5.1-5.1-11.8-7.8-18.9-7.8s-13.9 2.8-18.9 7.8c-5.1 4.9-7.9 11.7-7.9 18.8s2.8 13.9 7.8 18.9c5.1 5.1 11.9 7.9 19 7.9z"
-              fill="url(#_Linear4)"
-            />
-            <path
-              d="m56.3 45c-0.5-0.4-19.8-15.7-19.8-15.7l-4.5-25.7c-0.3 0.1-0.7 0.4-0.9 0.8l-3.2 25-19.9 15.3s-0.4 0.5-0.6 0.8c-0.1 0.2-0.1 0.5-0.1 0.8l24.6-10.1 24.6 10.1c0.2-0.5 0-1-0.2-1.3z"
-              fill="#fff"
-            />
-            <path
-              d="m32.2 32.8-0.2 4.6 22.6 9.1c0.8 0.4 1.4 0.2 2-0.2l-24.1-13.6c-0.1-0.1-0.3 0-0.3 0.1z"
-              fill="#565f64"
-            />
-            <path
-              d="m32.2 32.8s1.3 2.3 2.8 3.9c2.1 2.3 4.9 3.9 4.9 3.9l14.7 5.9c0.8 0.4 1.4 0.2 2-0.2l-24.1-13.6c-0.1-0.1-0.3 0-0.3 0.1z"
-              fill="url(#_Linear5)"
-            />
-            <path
-              d="m56.5 45.4c0-0.1-0.1-0.2-0.2-0.4l-20.6-15.1-2.8 1.8s0.2 0.1 0.3 0c0.3-0.1 0.9-0.2 1.5 0 0.5 0.2 21.8 13.8 21.8 13.8z"
-              fill="#a4aaae"
-              fillOpacity={0.6}
-            />
-            <path
-              d="m55.8 44.5-19.2-15.2-0.9 0.6 20.6 15.2c-0.1-0.2-0.3-0.4-0.5-0.6z"
-              fill="#333e46"
-            />
-            <path
-              d="m32.5 31.3-0.1 0.1s0 0.2 0.2 0.1c0.1-0.1 3-1.6 4-2.2l-3.5-24c-0.1-0.9-0.5-1.3-1.2-1.6l0.4 27.8z"
-              fill="#565f64"
-            />
-            <path
-              d="m30.8 5.3v1.3l-2.2 22.1c0 0.3 0.1 0.6 0.4 0.8l1.3 1 0.9-24.4 0.1-1.9c-0.3 0.2-0.4 0.6-0.5 1.1z"
-              fill="#a4aaae"
-              fillOpacity={0.6}
-            />
-            <path
-              d="m29.6 30.9-1.2-1-20.3 14.7s-0.6 0.4-0.7 0.8l0.7-0.4 21.3-13.4c0.4-0.2 0.5-0.4 0.2-0.7z"
-              fill="#a4aaae"
-              fillOpacity={0.6}
-            />
-            <path
-              d="m31.7 32.8c0-0.1-0.1-0.2-0.2-0.1l-24.2 13.7c0.6 0.4 1.2 0.5 2 0.2l22.6-9.1z"
-              fill="#565f64"
-            />
-            <path
-              d="m32.4 31.4 0.1-0.1-0.1 0.1s0 0.1 0.1 0.1h0.1c0.1-0.1 3-1.6 4-2.2l-0.4-2.9-3.1-21.1c0-0.4-0.1-0.7-0.3-0.9 0 0 1.5 20.2 1.5 22.4 0 2.9-1.9 4.6-1.9 4.6z"
-              fill="url(#_Linear6)"
-            />
-            <path
-              d="m31.7 32.8c0-0.1-0.1-0.2-0.2-0.1l-24.2 13.7c0.6 0.4 1.2 0.5 2 0.2l22.6-9.1z"
-              fill="url(#_Linear7)"
-            />
-            <path
-              d="m9.3 46.5 22.6-9.1-0.2-4.4c-0.4 1.2-1.1 2.5-3 3.5-1.4 0.8-14.8 7.4-19.6 9.7-0.3 0.2-0.7 0.3-0.9 0.4 0.4 0.2 0.7 0.1 1.1-0.1z"
-              fill="url(#_Linear8)"
-            />
-            <path
-              d="m32.5 31.3-0.1 0.1s0 0.2 0.2 0.1c0.1-0.1 3-1.6 4-2.2l-3.5-24c-0.1-0.9-0.5-1.3-1.2-1.6l0.4 27.8z"
-              fill="url(#_Linear9)"
-            />
-            <path
-              d="m32.5 31.3-0.1 0.1s0 0.2 0.2 0.1c0.1-0.1 3-1.6 4-2.2l-3.5-24c-0.1-0.9-0.5-1.3-1.2-1.6l0.4 27.8z"
-              fill="url(#_Linear10)"
-            />
-            <path
-              d="m5.1 44.4c-0.7-1.6-4.7-9.4-0.3-24.4h-1.7c-0.9 3-1.6 4.8-2 7.5 0 0-0.2 1-0.3 2.1s-0.1 1.7-0.1 2.4c0 6 1.5 9.5 1.5 9.5 1.6 5 4.4 9.5 8.2 12.9 3.3 2.9 8.4 5.1 12.6 5.9-0.7-0.1-12.7-5.2-17.9-15.9z"
-              fill="url(#_Linear11)"
-            />
-            <path
-              d="m32.4 32.6h-0.9c0.1 0 0.2 0 0.2 0.1l0.2 4.6h0.1l0.2-4.6c0-0.1 0.1-0.2 0.2-0.1z"
-              fill="url(#_Linear12)"
-            />
-            <path
-              d="m42 2.3c10.5 4 20.4 15 20.4 28.9 0 16.8-13.4 30.5-30.4 30.5v1.6c17 0 31.3-14 31.3-31.3 0-13.8-8.8-25.4-21.3-29.7z"
-              fill="url(#_Linear13)"
-            />
-            <path d="m32.3 0.7h-0.3z" fill="url(#_Linear14)" />
-            <path
-              d="m58.8 20.2c-7-16.1-22.8-17-23.7-17.1h-0.1c12.1 2.2 19.8 10.1 22.5 18.4v0.1c1.2 3.2 1.8 6.6 1.9 10.3 0.1 3.5-0.7 7.4-2.2 11-0.1 0.5-0.2 1.1-0.3 1.1h1.6c4.8-9 2.7-18.1 0.3-23.8z"
-              fill="url(#_Linear15)"
-            />
-            <path
-              d="m2.2 32.1c0-16.4 13.3-29.9 29.8-29.9s29.8 13.4 29.8 29.9c0 16.4-13.3 29.7-29.8 29.7s-29.8-13.3-29.8-29.7zm9.3-20.6c-5.3 5.3-8.6 12.6-8.6 20.6s3.3 15.3 8.5 20.5c5.3 5.2 12.6 8.5 20.6 8.5s15.3-3.2 20.5-8.5c5.3-5.2 8.5-12.5 8.5-20.5s-3.3-15.3-8.5-20.6-12.5-8.6-20.5-8.6-15.3 3.3-20.5 8.6z"
-              fill="#fbfbfb"
-            />
-            <path
-              d="m7.9 44.8 20.4-14.7c1.1 0.6 2.9 1.4 3.1 1.4 0.2 0.1 0.2-0.1 0.2-0.1l-2.5-2.1c-0.3-0.2-0.4-0.5-0.4-0.8l2.4-24.1c-0.1 0.1-0.1 0.3-0.2 0.4-0.1 0.2-0.1 0.3-0.1 0.5l-3.5 24.1-19.2 15.1c-0.1 0.1-0.2 0.2-0.2 0.3z"
-              fill="#333f47"
-            />
-          </g>
-        </g>
-      </g>
-      <defs>
-        <linearGradient
-          gradientTransform="matrix(48,40.2,-40.2,48,8,11.9)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear1"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#fff" />
-          <stop offset={0.1} stopColor="#e7e8e6" />
-          <stop offset={0.1} stopColor="#cdd0d0" />
-          <stop offset={0.2} stopColor="#b5bbbd" />
-          <stop offset={0.2} stopColor="#a5acaf" />
-          <stop offset={0.3} stopColor="#9ba3a7" />
-          <stop offset={0.3} stopColor="#98a0a4" />
-          <stop offset={0.4} stopColor="#828a8f" />
-          <stop offset={0.5} stopColor="#667075" />
-          <stop offset={0.6} stopColor="#535c63" />
-          <stop offset={0.7} stopColor="#475158" />
-          <stop offset={0.8} stopColor="#434d54" />
-          <stop offset={1} stopColor="#475157" />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(45,37.8,-37.8,45,9.5,13.1)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear2"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#0b1f2a" />
-          <stop offset={0.2} stopColor="#333f47" />
-          <stop offset={0.5} stopColor="#777f84" />
-          <stop offset={0.5} stopColor="#81898d" />
-          <stop offset={0.7} stopColor="#b3b8b8" />
-          <stop offset={0.8} stopColor="#d2d5d3" />
-          <stop offset={0.8} stopColor="#dee0dd" />
-          <stop offset={1} stopColor="#fbfbfb" />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-21.9 -60.2 60.2 -21.9 42.973 62.107)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear3"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#e1e3e1" stopOpacity={0.4} />
-          <stop offset={0.1} stopColor="#c1c5c4" stopOpacity={0.4} />
-          <stop offset={0.3} stopColor="#9ba1a2" stopOpacity={0.4} />
-          <stop offset={0.5} stopColor="#7d8487" stopOpacity={0.4} />
-          <stop offset={0.7} stopColor="#687074" stopOpacity={0} />
-          <stop offset={0.8} stopColor="#5b6469" stopOpacity={0} />
-          <stop offset={1} stopColor="#576065" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(27.6,47.8,-47.8,27.6,18.2,8.1)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear4"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#e1e3e1" stopOpacity={0.4} />
-          <stop offset={0.1} stopColor="#c1c5c4" stopOpacity={0.4} />
-          <stop offset={0.3} stopColor="#9ba1a2" stopOpacity={0.4} />
-          <stop offset={0.5} stopColor="#7d8487" stopOpacity={0.4} />
-          <stop offset={0.7} stopColor="#687074" stopOpacity={0} />
-          <stop offset={0.8} stopColor="#5b6469" stopOpacity={0} />
-          <stop offset={1} stopColor="#576065" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-1.7,2.8,-2.8,-1.7,44.5,39.4)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear5"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#27343c" />
-          <stop offset={1} stopColor="#00111e" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-2.8,-4.5,4.5,-2.8,39.6,29.1)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear6"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#02131f" />
-          <stop offset={0.1} stopColor="#02131f" />
-          <stop offset={0.9} stopColor="#02131f" stopOpacity={0} />
-          <stop offset={1} stopColor="#02131f" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-4.2,1.2,-1.2,-4.2,32,36.4)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear7"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#02131f" stopOpacity={0.8} />
-          <stop offset={0.2} stopColor="#02131f" stopOpacity={0.8} />
-          <stop offset={0.9} stopColor="#02131f" stopOpacity={0} />
-          <stop offset={1} stopColor="#02131f" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-.6 -1.5 1.5 -.6 20.8 41.9)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear8"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#02131f" stopOpacity={0.8} />
-          <stop offset={0.1} stopColor="#02131f" stopOpacity={0.8} />
-          <stop offset={1} stopColor="#02131f" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-3.4 .4 -.4 -3.4 35.6 17.2)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear9"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#02131f" />
-          <stop offset={0.3} stopColor="#02131f" />
-          <stop offset={0.8} stopColor="#02131f" stopOpacity={0} />
-          <stop offset={1} stopColor="#02131f" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-2.3 .3 -.3 -2.3 35.7 17.1)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear10"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#27343c" />
-          <stop offset={0.4} stopColor="#27343c" />
-          <stop offset={1} stopColor="#3b474e" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(27.9 16.1 -16.1 27.9 -.4 32.9)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear11"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#24303a" stopOpacity={0} />
-          <stop offset="0" stopColor="#25323b" stopOpacity={0} />
-          <stop offset={0.1} stopColor="#27343c" />
-          <stop offset={1} stopColor="#27343c" />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(0,-4.8,4.8,0,32,37.4)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear12"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#a5abaf" />
-          <stop offset={0.3} stopColor="#a5abaf" />
-          <stop offset={1} stopColor="#a5abaf" stopOpacity={0} />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(0,61,-61,0,47.7,2.3)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear13"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#dee0dd" />
-          <stop offset="0" stopColor="#c5c9c7" />
-          <stop offset="0" stopColor="#9ea4a5" />
-          <stop offset="0" stopColor="#82898c" />
-          <stop offset="0" stopColor="#71797d" />
-          <stop offset="0" stopColor="#6b7378" />
-          <stop offset={0.2} stopColor="#333f47" />
-          <stop offset={0.5} stopColor="#27343c" />
-          <stop offset={0.8} stopColor="#333f47" />
-          <stop offset={1} stopColor="#434d54" />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(2e-6 0 0 2e-6 32.1 .7)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear14"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#dee0dd" />
-          <stop offset="0" stopColor="#c5c9c7" />
-          <stop offset="0" stopColor="#9ea4a5" />
-          <stop offset="0" stopColor="#82898c" />
-          <stop offset="0" stopColor="#71797d" />
-          <stop offset="0" stopColor="#6b7378" />
-          <stop offset={0.2} stopColor="#333f47" />
-          <stop offset={0.5} stopColor="#27343c" />
-          <stop offset={0.8} stopColor="#333f47" />
-          <stop offset={1} stopColor="#434d54" />
-        </linearGradient>
-        <linearGradient
-          gradientTransform="matrix(-13.5,19.8,-19.8,-13.5,57.3,8.1)"
-          gradientUnits="userSpaceOnUse"
-          id="_Linear15"
-          x2="1"
-        >
-          <stop offset="0" stopColor="#27343c" />
-          <stop offset={0.7} stopColor="#27343c" />
-          <stop offset={0.7} stopColor="#2b373f" />
-          <stop offset={0.7} stopColor="#36424a" />
-          <stop offset={0.7} stopColor="#49545b" />
-          <stop offset={0.8} stopColor="#646d73" stopOpacity={0} />
-          <stop offset={0.8} stopColor="#868d92" stopOpacity={0} />
-          <stop offset={0.8} stopColor="#b0b5b8" stopOpacity={0} />
-          <stop offset={0.8} stopColor="#e1e3e4" stopOpacity={0} />
-          <stop offset={0.8} stopColor="#fff" stopOpacity={0} />
-          <stop offset={1} stopColor="#fff" stopOpacity={0} />
-        </linearGradient>
-      </defs>
+      <MercedesShieldPaths />
+      <MercedesShieldDefs />
     </svg>
   );
 }

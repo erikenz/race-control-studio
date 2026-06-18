@@ -1,0 +1,60 @@
+{
+  "header": {
+    "title": "Race Control Studio",
+    "studio": "Studio",
+    "instructions": "Instructions"
+  },
+  "sidebar": {
+    "title": "Alert Configurator",
+    "badge": "FORMULA-1",
+    "testPresets": "Test Alerts Presets",
+    "sectionBotrix": "Botrix Variables",
+    "sectionBotrixDesc": "These fields receive values from Botrix. Use {{name}}, {{text}}, and {{message}} placeholders in the heading template below. Configuring these inside Botrix means they update dynamically with each alert trigger.",
+    "nameLabel": "Name",
+    "nameDesc": "Maps to the {{name}} Botrix variable.",
+    "namePlaceholder": "e.g. LEWIS_44",
+    "alertTextLabel": "Alert Text",
+    "alertTextDesc": "Maps to the {{text}} Botrix variable.",
+    "alertTextPlaceholder": "e.g. subscribed",
+    "messageLabel": "Custom User Message (Radio)",
+    "messageDesc": "Maps to the {{message}} Botrix variable.",
+    "messagePlaceholder": "e.g. Staying with the team. 12 months completed!",
+    "sectionContents": "Alert Contents",
+    "sectionContentsDesc": "Customize the heading text and radio card appearance. Use {{name}}, {{text}}, and {{message}} placeholders to reference the Botrix variables above. These are replaced at preview time and in the generated HTML.",
+    "headingTemplateLabel": "Heading Template",
+    "headingTemplateDesc": "The first line of the alert banner. Use {{name}}, {{text}}, and {{message}} placeholders.",
+    "headingTemplatePlaceholder": "RACE CONTROL: {name} RENEWAL INCIDENT",
+    "radioSkinLabel": "Radio Skin Mode",
+    "radioSkinDesc": "Controls the radio card skin in the bottom-right corner.",
+    "radioSkinSpecific": "Specific Team",
+    "radioSkinRandomAll": "Random (All Teams)",
+    "radioSkinRandomSelected": "Random (Selected Teams)",
+    "teamSkinLabel": "Team Skin",
+    "teamSkinDesc": "The team whose colors, shield, and number appear on the card.",
+    "allowedTeamsLabel": "Allowed Teams",
+    "allowedTeamsDesc": "Only checked teams are used when picking a random skin.",
+    "persistentLabel": "Persistent Mode",
+    "persistentDesc": "Keeps the alert visible without animating out, useful for positioning and alignment in OBS.",
+    "copyHtml": "📋 COPY HTML",
+    "copiedHtml": "🏁 COPIED HTML!",
+    "replayPreview": "🔄 REPLAY PREVIEW",
+    "showCode": "Show Compiled Widget Code",
+    "hideCode": "Hide Compiled Widget Code"
+  },
+  "instructions": {
+    "title": "Botrix Setup Guide",
+    "step1": "Copy the widget HTML code using the primary red button above.",
+    "step2": "Open your Botrix Dashboard and go to the <1>Alerts</1> tab.",
+    "step3": "Select the <1>{{tab}}</1> category.",
+    "step4": "Scroll down, enable <1>Custom Code</1>, and paste into the <3>HTML</3> tab.",
+    "step5": "Keep the <1>CSS</1> and <3>JS</3> boxes completely empty."
+  },
+  "preview": {
+    "title": "OBS Overlay Canvas Preview",
+    "alignmentGrid": "Alignment Grid"
+  },
+  "codePanel": {
+    "title": "Compiled HTML Export Block",
+    "copyBtn": "Copy Output"
+  }
+}

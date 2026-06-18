@@ -1,0 +1,60 @@
+{
+  "header": {
+    "title": "Race Control Studio",
+    "studio": "Estudio",
+    "instructions": "Instrucciones"
+  },
+  "sidebar": {
+    "title": "Configurador de Alertas",
+    "badge": "FORMULA-1",
+    "testPresets": "Predefiniciones de Prueba",
+    "sectionBotrix": "Variables Botrix",
+    "sectionBotrixDesc": "Estos campos reciben valores de Botrix. Use los placeholders {{name}}, {{text}} y {{message}} en la plantilla de encabezado debajo. Configurarlos dentro de Botrix hace que se actualicen dinámicamente con cada alerta.",
+    "nameLabel": "Nombre",
+    "nameDesc": "Se asigna a la variable {{name}} de Botrix.",
+    "namePlaceholder": "ej. LEWIS_44",
+    "alertTextLabel": "Texto de Alerta",
+    "alertTextDesc": "Se asigna a la variable {{text}} de Botrix.",
+    "alertTextPlaceholder": "ej. suscrito",
+    "messageLabel": "Mensaje Personalizado (Radio)",
+    "messageDesc": "Se asigna a la variable {{message}} de Botrix.",
+    "messagePlaceholder": "ej. Permaneciendo en el equipo. ¡12 meses completados!",
+    "sectionContents": "Contenido de Alerta",
+    "sectionContentsDesc": "Personalice el texto del encabezado y la apariencia de la tarjeta de radio. Use los placeholders {{name}}, {{text}} y {{message}} para referenciar las variables Botrix de arriba. Se reemplazan en la vista previa y en el HTML generado.",
+    "headingTemplateLabel": "Plantilla de Encabezado",
+    "headingTemplateDesc": "La primera línea del banner de alerta. Use los placeholders {{name}}, {{text}} y {{message}}.",
+    "headingTemplatePlaceholder": "RACE CONTROL: {name} INCIDENTE DE RENOVACIÓN",
+    "radioSkinLabel": "Modo de Skin de Radio",
+    "radioSkinDesc": "Controla la skin de la tarjeta de radio en la esquina inferior derecha.",
+    "radioSkinSpecific": "Equipo Específico",
+    "radioSkinRandomAll": "Aleatorio (Todos los Equipos)",
+    "radioSkinRandomSelected": "Aleatorio (Equipos Seleccionados)",
+    "teamSkinLabel": "Skin de Equipo",
+    "teamSkinDesc": "El equipo cuyos colores, escudo y número aparecen en la tarjeta.",
+    "allowedTeamsLabel": "Equipos Permitidos",
+    "allowedTeamsDesc": "Solo los equipos marcados se usan al elegir una skin aleatoria.",
+    "persistentLabel": "Modo Persistente",
+    "persistentDesc": "Mantiene la alerta visible sin animación de salida, útil para posicionamiento y alineación en OBS.",
+    "copyHtml": "📋 COPIAR HTML",
+    "copiedHtml": "🏁 HTML COPIADO!",
+    "replayPreview": "🔄 REPETIR",
+    "showCode": "Mostrar Código del Widget",
+    "hideCode": "Ocultar Código del Widget"
+  },
+  "instructions": {
+    "title": "Guía de Configuración Botrix",
+    "step1": "Copie el código HTML del widget usando el botón rojo principal de arriba.",
+    "step2": "Abra su Panel de Botrix y vaya a la pestaña <1>Alertas</1>.",
+    "step3": "Seleccione la categoría <1>{{tab}}</1>.",
+    "step4": "Desplácese hacia abajo, active <1>Código Personalizado</1> y péguelo en la pestaña <3>HTML</3>.",
+    "step5": "Mantenga las cajas de <1>CSS</1> y <3>JS</3> completamente vacías."
+  },
+  "preview": {
+    "title": "Vista Previa del Lienzo OBS",
+    "alignmentGrid": "Cuadrícula de Alineación"
+  },
+  "codePanel": {
+    "title": "Bloque de Exportación HTML Compilado",
+    "copyBtn": "Copiar Salida"
+  }
+}

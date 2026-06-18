@@ -20,6 +20,7 @@ interface AppState {
   bgColor: string;
   copied: boolean;
   headingTemplate: string;
+  locale: string;
   message: string;
   name: string;
   persistent: boolean;
@@ -38,6 +39,7 @@ interface AppActions {
   setBgColor: (color: string) => void;
   setCopied: (copied: boolean) => void;
   setHeadingTemplate: (template: string) => void;
+  setLocale: (locale: string) => void;
   setMessage: (message: string) => void;
   setName: (name: string) => void;
   setPersistent: (persistent: boolean) => void;
@@ -139,6 +141,7 @@ const INITIAL_STATE: AppState = {
   bgColor: "grid",
   copied: false,
   headingTemplate: PRESETS.subscription.headingTemplate,
+  locale: "en",
   message: "Staying with the team. 12 months completed!",
   name: "HAMILTON_44",
   persistent: false,
@@ -183,6 +186,8 @@ export const useAppStore = create<AppStore>()(
       setBgColor: (bgColor) => set({ bgColor }),
       setCopied: (copied) => set({ copied }),
       setHeadingTemplate: (headingTemplate) => set({ headingTemplate }),
+      setLocale: (locale) => set({ locale }),
+
       setMessage: (message) => set({ message }),
 
       setName: (name) => set({ name }),
@@ -245,6 +250,7 @@ export const useAppStore = create<AppStore>()(
           activePreviewTeam,
           bgColor,
           headingTemplate,
+          locale,
           message,
           name,
           persistent,
@@ -261,6 +267,7 @@ export const useAppStore = create<AppStore>()(
           activePreviewTeam,
           bgColor,
           headingTemplate,
+          locale,
           message,
           name,
           persistent,
