@@ -6,10 +6,11 @@ import {
   sharedStyles,
 } from "./shared";
 
-export function TipAlert({ name, text }: AlertProps) {
+export function TipAlert({ heading, name, text }: AlertProps) {
   const resolvedName = name.trim() || "PILOTO";
   const resolvedText = text || "tipped";
-  const heading = `RACE CONTROL: ${resolvedName.toUpperCase()} PIT STOP INCIDENT`;
+  const resolvedHeading =
+    heading || `RACE CONTROL: ${resolvedName.toUpperCase()} PIT STOP INCIDENT`;
 
   return (
     <div className="f1-alert-banner">
@@ -17,15 +18,16 @@ export function TipAlert({ name, text }: AlertProps) {
         <F1Logo />
       </div>
       <div className="f1-alert-body">
-        <p className="f1-heading-text">{heading}</p>
+        <p className="f1-heading-text">{resolvedHeading}</p>
         <p className="f1-detail-text">{resolvedText.toUpperCase()}</p>
       </div>
     </div>
   );
 }
 
-TipAlert.getBotrixHtml =
-  () => `<div class="container {disposition} {transition}">
+TipAlert.getBotrixHtml = (
+  headingTemplate?: string
+) => `<div class="container {disposition} {transition}">
   ${fontLink}
   <style>${sharedStyles}</style>
 
@@ -37,7 +39,7 @@ TipAlert.getBotrixHtml =
     </div>
 
     <div class="f1-alert-body">
-      <p class="f1-heading-text" id="alert-heading">RACE CONTROL: {name} PIT STOP INCIDENT</p>
+      <p class="f1-heading-text" id="alert-heading">${headingTemplate || "RACE CONTROL: {name} PIT STOP INCIDENT"}</p>
       <p class="f1-detail-text" id="alert-detail">{text}</p>
     </div>
   </div>

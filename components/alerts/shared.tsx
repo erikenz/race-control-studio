@@ -155,6 +155,7 @@ export function F1Logo() {
 
 export interface AlertProps {
   amount?: string;
+  heading?: string;
   message?: string;
   name: string;
   text: string;
