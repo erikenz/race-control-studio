@@ -59,50 +59,98 @@ export type AppStore = AppState & AppActions;
 
 // --- Presets ---
 
-export const PRESETS: Record<string, PresetData> = {
-  followers: {
-    headingTemplate: "RACE CONTROL: {name} GRID ENTRY",
-    message: "",
-    name: "Rookie_Driver",
-    template: "followers",
-    text: "Grid entry - green light on track!",
+export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
+  en: {
+    followers: {
+      headingTemplate: "RACE CONTROL: {name} GRID ENTRY",
+      message: "",
+      name: "Test_User",
+      template: "followers",
+      text: "Grid entry - new follower!",
+    },
+    "gift-sub": {
+      headingTemplate: "RACE CONTROL: {name} GIFT INCIDENT",
+      message: "",
+      name: "Test_User",
+      template: "gift-sub",
+      text: "Gifted 5 subscriptions!",
+    },
+    host: {
+      headingTemplate: "RACE CONTROL: {name} RESTART INCIDENT",
+      message: "",
+      name: "Test_User",
+      template: "host",
+      text: "Restart incident: joined with 120 viewers!",
+    },
+    kicks: {
+      headingTemplate: "RACE CONTROL: {name} KICK INCIDENT",
+      message: "This is a test message",
+      name: "Test_User",
+      template: "kicks",
+      text: "sent 500 Kicks!",
+    },
+    subscription: {
+      headingTemplate: "RACE CONTROL: {name} RENEWAL INCIDENT",
+      message: "This is a test message",
+      name: "Test_User",
+      template: "subscription",
+      text: "stayed with the team for 12 months!",
+    },
+    "tip-donate": {
+      headingTemplate: "RACE CONTROL: {name} PIT STOP INCIDENT",
+      message: "This is a test message",
+      name: "Test_User",
+      template: "tip-donate",
+      text: "tipped $15.00 USD",
+    },
   },
-  "gift-sub": {
-    headingTemplate: "RACE CONTROL: {name} GIFT INCIDENT",
-    message: "",
-    name: "Team_Principal",
-    template: "gift-sub",
-    text: "Sponsored 5 drivers in the pit lane!",
-  },
-  host: {
-    headingTemplate: "RACE CONTROL: {name} RESTART INCIDENT",
-    message: "",
-    name: "Safety_Car",
-    template: "host",
-    text: "Restart incident: joined force with 120 viewers!",
-  },
-  kicks: {
-    headingTemplate: "RACE CONTROL: {name} KICK INCIDENT",
-    message: "Launch control active! First row start on Kick!",
-    name: "KickStreamer",
-    template: "kicks",
-    text: "sent 500 Kicks!",
-  },
-  subscription: {
-    headingTemplate: "RACE CONTROL: {name} RENEWAL INCIDENT",
-    message: "Staying with the team. 12 months completed!",
-    name: "HAMILTON_44",
-    template: "subscription",
-    text: "stayed with the team for 12 months!",
-  },
-  "tip-donate": {
-    headingTemplate: "RACE CONTROL: {name} PIT STOP INCIDENT",
-    message: "For tyre compound upgrade!",
-    name: "Pit_Crew",
-    template: "tip-donate",
-    text: "tipped $15.00 USD",
+  es: {
+    followers: {
+      headingTemplate: "CONTROL DE CARRERA: INGRESO A PISTA DE {name}",
+      message: "",
+      name: "Usuario_Prueba",
+      template: "followers",
+      text: "¡Ingreso a pista - nuevo seguidor!",
+    },
+    "gift-sub": {
+      headingTemplate: "CONTROL DE CARRERA: INCIDENTE DE REGALO DE {name}",
+      message: "",
+      name: "Usuario_Prueba",
+      template: "gift-sub",
+      text: "¡Regaló 5 suscripciones!",
+    },
+    host: {
+      headingTemplate: "CONTROL DE CARRERA: REINICIO CON {name}",
+      message: "",
+      name: "Usuario_Prueba",
+      template: "host",
+      text: "¡Reinicio de carrera: se unió con 120 espectadores!",
+    },
+    kicks: {
+      headingTemplate: "CONTROL DE CARRERA: INCIDENTE KICK DE {name}",
+      message: "Este es un mensaje de prueba",
+      name: "Usuario_Prueba",
+      template: "kicks",
+      text: "¡envió 500 Kicks!",
+    },
+    subscription: {
+      headingTemplate: "CONTROL DE CARRERA: RENOVACIÓN DE {name}",
+      message: "Este es un mensaje de prueba",
+      name: "Usuario_Prueba",
+      template: "subscription",
+      text: "¡permanece en el equipo por 12 meses!",
+    },
+    "tip-donate": {
+      headingTemplate: "CONTROL DE CARRERA: PARADA EN PITS DE {name}",
+      message: "Este es un mensaje de prueba",
+      name: "Usuario_Prueba",
+      template: "tip-donate",
+      text: "¡donó $15.00 USD!",
+    },
   },
 };
+
+export const PRESETS: Record<string, PresetData> = LOCALIZED_PRESETS.en;
 
 export const PRESET_LABELS: Record<string, string> = {
   followers: "Followers",
@@ -112,6 +160,79 @@ export const PRESET_LABELS: Record<string, string> = {
   subscription: "Subscription",
   "tip-donate": "Tip/Donate",
 };
+
+// --- Known Default Value Checkers ---
+
+const KNOWN_DEFAULT_NAMES = new Set([
+  "Test_User",
+  "Usuario_Prueba",
+  "Piloto_Prueba",
+  "HAMILTON_44",
+  "Rookie_Driver",
+  "Team_Principal",
+  "Safety_Car",
+  "KickStreamer",
+  "Pit_Crew",
+]);
+
+const KNOWN_DEFAULT_MESSAGES = new Set([
+  "This is a test message",
+  "Este es un mensaje de prueba",
+  "Staying with the team. 12 months completed!",
+  "Launch control active! First row start on Kick!",
+  "For tyre compound upgrade!",
+  "",
+]);
+
+const KNOWN_DEFAULT_TEXTS = new Set([
+  "stayed with the team for 12 months!",
+  "¡permanece en el equipo por 12 meses!",
+  "Grid entry - green light on track!",
+  "Grid entry - new follower!",
+  "¡Ingreso a pista - nuevo seguidor!",
+  "Sponsored 5 drivers in the pit lane!",
+  "Gifted 5 subscriptions!",
+  "¡Regaló 5 suscripciones!",
+  "Restart incident: joined force with 120 viewers!",
+  "Restart incident: joined with 120 viewers!",
+  "¡Reinicio de carrera: se unió con 120 espectadores!",
+  "sent 500 Kicks!",
+  "¡envió 500 Kicks!",
+  "tipped $15.00 USD",
+  "¡donó $15.00 USD!",
+]);
+
+const KNOWN_DEFAULT_HEADINGS = new Set([
+  "RACE CONTROL: {name} RENEWAL INCIDENT",
+  "CONTROL DE CARRERA: RENOVACIÓN DE {name}",
+  "RACE CONTROL: {name} GRID ENTRY",
+  "CONTROL DE CARRERA: INGRESO A PISTA DE {name}",
+  "RACE CONTROL: {name} GIFT INCIDENT",
+  "CONTROL DE CARRERA: INCIDENTE DE REGALO DE {name}",
+  "RACE CONTROL: {name} RESTART INCIDENT",
+  "CONTROL DE CARRERA: REINICIO CON {name}",
+  "RACE CONTROL: {name} KICK INCIDENT",
+  "CONTROL DE CARRERA: INCIDENTE KICK DE {name}",
+  "RACE CONTROL: {name} PIT STOP INCIDENT",
+  "CONTROL DE CARRERA: PARADA EN PITS DE {name}",
+  "RACE CONTROL: {messageTemplate}",
+]);
+
+function isDefaultName(value: string): boolean {
+  return KNOWN_DEFAULT_NAMES.has(value.trim());
+}
+
+function isDefaultMessage(value: string): boolean {
+  return KNOWN_DEFAULT_MESSAGES.has(value.trim());
+}
+
+function isDefaultText(value: string): boolean {
+  return KNOWN_DEFAULT_TEXTS.has(value.trim());
+}
+
+function isDefaultHeading(value: string): boolean {
+  return KNOWN_DEFAULT_HEADINGS.has(value.trim());
+}
 
 // --- Helpers ---
 
@@ -143,10 +264,10 @@ const INITIAL_STATE: AppState = {
   activePreviewTeam: "ferrari",
   bgColor: "grid",
   copied: false,
-  headingTemplate: PRESETS.subscription.headingTemplate,
+  headingTemplate: LOCALIZED_PRESETS.en.subscription.headingTemplate,
   locale: "en",
-  message: "Staying with the team. 12 months completed!",
-  name: "HAMILTON_44",
+  message: "This is a test message",
+  name: "Test_User",
   persistent: false,
   provider: "botrix",
   radioSkinMode: "specific",
@@ -155,7 +276,7 @@ const INITIAL_STATE: AppState = {
   selectedTemplate: "subscription",
   showCode: false,
   showGrid: true,
-  text: "stayed with the team for 12 months!",
+  text: LOCALIZED_PRESETS.en.subscription.text,
   triggerKey: 1,
 };
 
@@ -167,11 +288,13 @@ export const useAppStore = create<AppStore>()(
       ...INITIAL_STATE,
 
       loadPreset: (presetType) => {
-        const preset = PRESETS[presetType];
+        const state = get();
+        const localePresets =
+          LOCALIZED_PRESETS[state.locale] || LOCALIZED_PRESETS.en;
+        const preset = localePresets[presetType];
         if (!preset) {
           return;
         }
-        const state = get();
         set({
           activePreset: presetType,
           activePreviewTeam: determinePreviewTeam(
@@ -190,7 +313,32 @@ export const useAppStore = create<AppStore>()(
       setBgColor: (bgColor) => set({ bgColor }),
       setCopied: (copied) => set({ copied }),
       setHeadingTemplate: (headingTemplate) => set({ headingTemplate }),
-      setLocale: (locale) => set({ locale }),
+
+      setLocale: (locale) => {
+        const state = get();
+        if (state.locale === locale) {
+          return;
+        }
+
+        const localePresets = LOCALIZED_PRESETS[locale] || LOCALIZED_PRESETS.en;
+        const targetPreset =
+          localePresets[state.activePreset] || localePresets.subscription;
+
+        const updateName = isDefaultName(state.name);
+        const updateMessage = isDefaultMessage(state.message);
+        const updateText = isDefaultText(state.text);
+        const updateHeading = isDefaultHeading(state.headingTemplate);
+
+        set({
+          headingTemplate: updateHeading
+            ? targetPreset.headingTemplate
+            : state.headingTemplate,
+          locale,
+          message: updateMessage ? targetPreset.message : state.message,
+          name: updateName ? targetPreset.name : state.name,
+          text: updateText ? targetPreset.text : state.text,
+        });
+      },
 
       setMessage: (message) => set({ message }),
 
