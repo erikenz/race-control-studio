@@ -5,10 +5,15 @@ import { SubAlert } from "@/components/alerts/sub-alert";
 import { ConfiguratorSidebar } from "@/components/configurator-sidebar";
 import { AlertHeader } from "@/components/header";
 import { PreviewPanel } from "@/components/preview-panel";
-import { alertComponents, getCombinedBotrixHtml } from "@/lib/alert-utils";
+import {
+  alertComponents,
+  getCombinedBotrixHtml,
+  getCombinedStreamlabsHtml,
+} from "@/lib/alert-utils";
 import { useAppStore } from "@/lib/store";
 
 export default function AlertPreviewPage() {
+  const provider = useAppStore((s) => s.provider);
   const selectedTemplate = useAppStore((s) => s.selectedTemplate);
   const persistent = useAppStore((s) => s.persistent);
   const radioSkinMode = useAppStore((s) => s.radioSkinMode);
@@ -25,7 +30,21 @@ export default function AlertPreviewPage() {
   );
 
   let rawCode = "";
-  if (allowsMessage) {
+  if (provider === "streamlabs") {
+    if (allowsMessage) {
+      rawCode = getCombinedStreamlabsHtml(
+        selectedTemplate,
+        persistent,
+        radioSkinMode,
+        selectedRadioSkins,
+        radioTeam,
+        headingTemplate
+      );
+    } else if (alertComponents[selectedTemplate]) {
+      rawCode =
+        alertComponents[selectedTemplate].getStreamlabsHtml(headingTemplate);
+    }
+  } else if (allowsMessage) {
     rawCode = getCombinedBotrixHtml(
       selectedTemplate,
       persistent,
@@ -53,7 +72,7 @@ export default function AlertPreviewPage() {
   };
 
   return (
-    <main className="relative flex h-dvh flex-col overflow-hidden bg-grid-pattern bg-slate-955 text-slate-100">
+    <main className="relative flex min-h-dvh flex-col overflow-x-hidden bg-grid-pattern bg-slate-955 text-slate-100">
       <style>{sharedStyles}</style>
 
       {/* Navigation Bar */}
@@ -61,18 +80,20 @@ export default function AlertPreviewPage() {
 
       {/* Background design elements */}
       <div className="pointer-events-none absolute top-0 right-0 h-125 w-125 rounded-full bg-[#e10600]/5 blur-[120px]" />
-      <div className="pointer-events-none absolute bottom-0 left-0 h-125 w-125 rounded-full bg-blue-600/5 blur-[120px]" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-125 w-125 rounded-full bg-cyan-600/5 blur-[120px]" />
 
       {/* Main Workspace Container */}
-      <div className="z-10 mx-auto flex w-full max-w-[95vw] flex-1 flex-col gap-6 overflow-hidden p-4 md:p-6">
+      <div className="z-10 mx-auto flex w-full max-w-[95vw] flex-1 flex-col gap-6 p-4 md:p-6">
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
-          {/* LEFT: Controls Column (col-span-4) */}
-          <ConfiguratorSidebar
-            onCopyAction={handleCopy}
-            onTriggerAction={triggerReplay}
-          />
+          {/* LEFT: Controls & Configurator Dashboard (col-span-6 lg / col-span-6 xl) */}
+          <div className="lg:col-span-6 xl:col-span-6">
+            <ConfiguratorSidebar
+              onCopyAction={handleCopy}
+              onTriggerAction={triggerReplay}
+            />
+          </div>
 
-          {/* RIGHT: Viewport Column (col-span-8) */}
+          {/* RIGHT: Viewport & Telemetry Stage (col-span-6 lg / col-span-5 xl) */}
           <PreviewPanel
             AlertComponent={AlertComponent}
             compiledCode={compiledCode}

@@ -5,6 +5,7 @@ import { TEAM_RADIO_CONFIGS } from "./radio-config";
 // --- Types ---
 
 export type RadioSkinMode = "specific" | "random-all" | "random-selected";
+export type ProviderType = "botrix" | "streamlabs";
 
 interface PresetData {
   headingTemplate: string;
@@ -24,6 +25,7 @@ interface AppState {
   message: string;
   name: string;
   persistent: boolean;
+  provider: ProviderType;
   radioSkinMode: RadioSkinMode;
   radioTeam: string;
   selectedRadioSkins: string[];
@@ -43,6 +45,7 @@ interface AppActions {
   setMessage: (message: string) => void;
   setName: (name: string) => void;
   setPersistent: (persistent: boolean) => void;
+  setProvider: (provider: ProviderType) => void;
   setSelectedSkins: (skins: string[]) => void;
   setShowCode: (show: boolean) => void;
   setShowGrid: (show: boolean) => void;
@@ -145,6 +148,7 @@ const INITIAL_STATE: AppState = {
   message: "Staying with the team. 12 months completed!",
   name: "HAMILTON_44",
   persistent: false,
+  provider: "botrix",
   radioSkinMode: "specific",
   radioTeam: "ferrari",
   selectedRadioSkins: ["ferrari", "mercedes", "redbull"],
@@ -193,6 +197,8 @@ export const useAppStore = create<AppStore>()(
       setName: (name) => set({ name }),
 
       setPersistent: (persistent) => set({ persistent }),
+
+      setProvider: (provider) => set({ provider }),
 
       setSelectedSkins: (skins) => {
         const state = get();
@@ -254,6 +260,7 @@ export const useAppStore = create<AppStore>()(
           message,
           name,
           persistent,
+          provider,
           radioSkinMode,
           radioTeam,
           selectedRadioSkins,
@@ -271,6 +278,7 @@ export const useAppStore = create<AppStore>()(
           message,
           name,
           persistent,
+          provider,
           radioSkinMode,
           radioTeam,
           selectedRadioSkins,

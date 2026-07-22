@@ -44,3 +44,34 @@ HostAlert.getBotrixHtml = (
     </div>
   </div>
 </div>`;
+
+HostAlert.getStreamlabsHtml = (
+  headingTemplate?: string
+) => `<div class="container streamlabs-container">
+  ${fontLink}
+  <style>
+    ${sharedStyles}
+    #alert-image-wrap { display: none !important; }
+    #alert-text-wrap { width: 100% !important; height: 100% !important; }
+    #alert-box, #alert-text, #alert-message, #alert-user-message, #alert-image, #alert-image-wrap, #alert-text-wrap { margin: 0 !important; padding: 0 !important; border: 0 !important; background: transparent !important; text-shadow: none !important; }
+  </style>
+
+  <div id="alert-image-wrap">
+    <div id="alert-image">{img}</div>
+  </div>
+
+  <div id="alert-text-wrap">
+    <div class="f1-alert-banner">
+      <div class="f1-alert-badge">
+        <div class="f1-logo-content">
+          ${f1LogoSvg}
+        </div>
+      </div>
+
+      <div class="f1-alert-body">
+        <div id="alert-message" class="f1-heading-text">${headingTemplate || "RACE CONTROL: {messageTemplate}"}</div>
+        <div id="alert-detail" class="f1-detail-text">RACE CONTROL INCIDENT</div>
+      </div>
+    </div>
+  </div>
+</div>`;
