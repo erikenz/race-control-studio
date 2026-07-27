@@ -26,7 +26,8 @@ export function FollowerAlert({ heading, name, text }: AlertProps) {
 }
 
 FollowerAlert.getBotrixHtml = (
-  headingTemplate?: string
+  headingTemplate?: string,
+  detailTemplate?: string
 ) => `<div class="container {disposition} {transition}">
   ${fontLink}
   <style>${sharedStyles}</style>
@@ -40,13 +41,14 @@ FollowerAlert.getBotrixHtml = (
 
     <div class="f1-alert-body">
       <p class="f1-heading-text" id="alert-heading">${headingTemplate || "RACE CONTROL: {name} GRID ENTRY"}</p>
-      <p class="f1-detail-text" id="alert-detail">{text}</p>
+      <p class="f1-detail-text" id="alert-detail">${detailTemplate || "{text}"}</p>
     </div>
   </div>
 </div>`;
 
 FollowerAlert.getStreamlabsHtml = (
-  headingTemplate?: string
+  headingTemplate?: string,
+  detailTemplate?: string
 ) => `<div class="container streamlabs-container">
   ${fontLink}
   <style>
@@ -70,7 +72,7 @@ FollowerAlert.getStreamlabsHtml = (
 
       <div class="f1-alert-body">
         <div id="alert-message" class="f1-heading-text">${headingTemplate || "RACE CONTROL: {messageTemplate}"}</div>
-        <div id="alert-detail" class="f1-detail-text">RACE CONTROL INCIDENT</div>
+        <div id="alert-detail" class="f1-detail-text">${detailTemplate || "{text}"}</div>
       </div>
     </div>
   </div>

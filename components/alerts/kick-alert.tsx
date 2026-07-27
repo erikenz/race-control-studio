@@ -26,7 +26,8 @@ export function KickAlert({ heading, name, text }: AlertProps) {
 }
 
 KickAlert.getBotrixHtml = (
-  headingTemplate?: string
+  headingTemplate?: string,
+  detailTemplate?: string
 ) => `<div class="container {disposition} {transition}">
   ${fontLink}
   <style>${sharedStyles}</style>
@@ -40,13 +41,14 @@ KickAlert.getBotrixHtml = (
 
     <div class="f1-alert-body">
       <p class="f1-heading-text" id="alert-heading">${headingTemplate || "RACE CONTROL: {name} KICK INCIDENT"}</p>
-      <p class="f1-detail-text" id="alert-detail">{text}</p>
+      <p class="f1-detail-text" id="alert-detail">${detailTemplate || "{text}"}</p>
     </div>
   </div>
 </div>`;
 
 KickAlert.getStreamlabsHtml = (
-  headingTemplate?: string
+  headingTemplate?: string,
+  detailTemplate?: string
 ) => `<div class="container streamlabs-container">
   ${fontLink}
   <style>
@@ -70,7 +72,7 @@ KickAlert.getStreamlabsHtml = (
 
       <div class="f1-alert-body">
         <div id="alert-message" class="f1-heading-text">${headingTemplate || "RACE CONTROL: {messageTemplate}"}</div>
-        <div id="alert-detail" class="f1-detail-text">RACE CONTROL INCIDENT</div>
+        <div id="alert-detail" class="f1-detail-text">${detailTemplate || "{text}"}</div>
       </div>
     </div>
   </div>

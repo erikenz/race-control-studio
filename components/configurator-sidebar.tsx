@@ -7,17 +7,6 @@ import { TEAM_RADIO_CONFIGS } from "@/lib/radio-config";
 import { PRESET_LABELS, PRESETS, useAppStore } from "@/lib/store";
 import { Trans, useTranslation } from "react-i18next";
 
-const codeTag = (key: string) => (
-  <code
-    className="rounded bg-slate-800/60 px-1 py-0.5 font-mono text-[#DF0631] text-[10px]"
-    key={key}
-  />
-);
-
-const inlineCodeTag = (key: string) => (
-  <code className="font-mono text-[#DF0631]" key={key} />
-);
-
 function ProviderSelectionDeck() {
   const provider = useAppStore((s) => s.provider);
   const setProvider = useAppStore((s) => s.setProvider);
@@ -183,183 +172,99 @@ function InstructionsCard() {
 
 function VariablesSection() {
   const provider = useAppStore((s) => s.provider);
-  const name = useAppStore((s) => s.name);
-  const text = useAppStore((s) => s.text);
-  const message = useAppStore((s) => s.message);
-  const selectedTemplate = useAppStore((s) => s.selectedTemplate);
-  const setName = useAppStore((s) => s.setName);
-  const setText = useAppStore((s) => s.setText);
-  const setMessage = useAppStore((s) => s.setMessage);
+  const locale = useAppStore((s) => s.locale);
   const { t } = useTranslation();
-  const allowsMessage = ["subscription", "tip-donate", "kicks"].includes(
-    selectedTemplate
-  );
 
-  const inputClass =
-    "h-9 border-slate-800 bg-slate-955 text-slate-100 text-sm hover:border-slate-700 focus:ring-1 focus:ring-red-500";
-  const labelClass =
-    "font-bold font-mono text-slate-300 text-xs uppercase tracking-wider";
-  const descClass = "text-slate-500 text-[11px] leading-relaxed -mt-0.5";
+  const streamlabsVars = [
+    {
+      desc: t("sidebar.varDescName"),
+      var: "{name}",
+    },
+    {
+      desc: t("sidebar.varDescText"),
+      var: "{text}",
+    },
+    {
+      desc: t("sidebar.varDescMessage"),
+      var: "{message}",
+    },
+    {
+      desc: t("sidebar.varDescMessageTemplate"),
+      var: "{messageTemplate}",
+    },
+    {
+      desc: t("sidebar.varDescUserMessage"),
+      var: "{userMessage}",
+    },
+    {
+      desc: t("sidebar.varDescImg"),
+      var: "{img}",
+    },
+  ];
 
-  if (provider === "streamlabs") {
-    return (
-      <div className="flex flex-col gap-4 border-slate-800/60 border-t pt-4">
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-cyan-400" />
-          <span className="font-bold font-mono text-[11px] text-slate-400 uppercase tracking-widest">
-            {t("sidebar.sectionStreamlabs")}
-          </span>
-        </div>
-        <p className="text-[11px] text-slate-500 leading-relaxed">
-          <Trans
-            components={{
-              1: codeTag("1"),
-              2: codeTag("2"),
-              3: codeTag("3"),
-            }}
-            i18nKey="sidebar.sectionStreamlabsDesc"
-          />
-        </p>
+  const botrixVars = [
+    {
+      desc: t("sidebar.varDescBotrixName"),
+      var: "{name}",
+    },
+    {
+      desc: t("sidebar.varDescBotrixText"),
+      var: "{text}",
+    },
+    {
+      desc: t("sidebar.varDescBotrixMessage"),
+      var: "{message}",
+    },
+    {
+      desc: t("sidebar.varDescBotrixDisposition"),
+      var: "{disposition}",
+    },
+    {
+      desc: t("sidebar.varDescBotrixTransition"),
+      var: "{transition}",
+    },
+  ];
 
-        <div className="flex flex-col gap-1.5">
-          <Label className={labelClass} htmlFor="name-input">
-            {t("sidebar.nameLabel")}
-          </Label>
-          <p className={descClass}>
-            Simulated chatter name for previewing standard templates.
-          </p>
-          <Input
-            className={inputClass}
-            id="name-input"
-            onChange={(e) => setName(e.target.value)}
-            placeholder={t("sidebar.namePlaceholder")}
-            type="text"
-            value={name}
-          />
-        </div>
+  const vars = provider === "streamlabs" ? streamlabsVars : botrixVars;
+  const accentColor =
+    provider === "streamlabs" ? "bg-cyan-400" : "bg-[#DF0631]";
+  const sectionKey =
+    provider === "streamlabs"
+      ? "sidebar.sectionStreamlabs"
+      : "sidebar.sectionBotrix";
 
-        <div className="flex flex-col gap-1.5">
-          <Label className={labelClass} htmlFor="text-input">
-            Alert Action Detail
-          </Label>
-          <p className={descClass}>
-            Simulated detail text for previewing Streamlabs alerts.
-          </p>
-          <Input
-            className={inputClass}
-            id="text-input"
-            onChange={(e) => setText(e.target.value)}
-            placeholder={t("sidebar.alertTextPlaceholder")}
-            type="text"
-            value={text}
-          />
-        </div>
-
-        {allowsMessage && (
-          <div className="flex flex-col gap-1.5">
-            <Label className={labelClass} htmlFor="message-input">
-              {t("sidebar.userMessageLabel")}
-            </Label>
-            <p className={descClass}>
-              <Trans
-                components={{ 1: inlineCodeTag("1") }}
-                i18nKey="sidebar.userMessageDesc"
-              />
-            </p>
-            <Input
-              className={inputClass}
-              id="message-input"
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder={t("sidebar.messagePlaceholder")}
-              type="text"
-              value={message}
-            />
-          </div>
-        )}
-      </div>
-    );
-  }
+  const exampleTemplate =
+    locale === "es"
+      ? "CONTROL DE CARRERA: PARADA EN PITS DE {name}"
+      : "RACE CONTROL: {name} PIT STOP INCIDENT";
 
   return (
     <div className="flex flex-col gap-4 border-slate-800/60 border-t pt-4">
       <div className="flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-[#DF0631]" />
+        <span className={`h-2 w-2 rounded-full ${accentColor}`} />
         <span className="font-bold font-mono text-[11px] text-slate-400 uppercase tracking-widest">
-          {t("sidebar.sectionBotrix")}
+          {t(sectionKey)} — {t("sidebar.variablesSectionTitle")}
         </span>
       </div>
       <p className="text-[11px] text-slate-500 leading-relaxed">
-        <Trans
-          components={{
-            1: codeTag("1"),
-            2: codeTag("2"),
-            3: codeTag("3"),
-          }}
-          i18nKey="sidebar.sectionBotrixDesc"
-        />
+        {t("sidebar.variablesSectionDesc")}{" "}
+        <code className="font-mono text-[#DF0631]">
+          &ldquo;{exampleTemplate}&rdquo;
+        </code>
       </p>
-
-      <div className="flex flex-col gap-1.5">
-        <Label className={labelClass} htmlFor="name-input">
-          {t("sidebar.nameLabel")}
-        </Label>
-        <p className={descClass}>
-          <Trans
-            components={{ 1: inlineCodeTag("1") }}
-            i18nKey="sidebar.nameDesc"
-          />
-        </p>
-        <Input
-          className={inputClass}
-          id="name-input"
-          onChange={(e) => setName(e.target.value)}
-          placeholder={t("sidebar.namePlaceholder")}
-          type="text"
-          value={name}
-        />
+      <div className="flex flex-col gap-1">
+        {vars.map((v) => (
+          <div
+            className="flex items-baseline gap-2 rounded bg-slate-900/50 px-2 py-1"
+            key={v.var}
+          >
+            <code className="shrink-0 font-mono text-[10px] text-cyan-400">
+              {v.var}
+            </code>
+            <span className="text-[10px] text-slate-500">{v.desc}</span>
+          </div>
+        ))}
       </div>
-
-      <div className="flex flex-col gap-1.5">
-        <Label className={labelClass} htmlFor="text-input">
-          {t("sidebar.alertTextLabel")}
-        </Label>
-        <p className={descClass}>
-          <Trans
-            components={{ 1: inlineCodeTag("1") }}
-            i18nKey="sidebar.alertTextDesc"
-          />
-        </p>
-        <Input
-          className={inputClass}
-          id="text-input"
-          onChange={(e) => setText(e.target.value)}
-          placeholder={t("sidebar.alertTextPlaceholder")}
-          type="text"
-          value={text}
-        />
-      </div>
-
-      {allowsMessage && (
-        <div className="flex flex-col gap-1.5">
-          <Label className={labelClass} htmlFor="message-input">
-            {t("sidebar.messageLabel")}
-          </Label>
-          <p className={descClass}>
-            <Trans
-              components={{ 1: inlineCodeTag("1") }}
-              i18nKey="sidebar.messageDesc"
-            />
-          </p>
-          <Input
-            className={inputClass}
-            id="message-input"
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={t("sidebar.messagePlaceholder")}
-            type="text"
-            value={message}
-          />
-        </div>
-      )}
     </div>
   );
 }
@@ -367,12 +272,14 @@ function VariablesSection() {
 function AlertContentsSection() {
   const provider = useAppStore((s) => s.provider);
   const headingTemplate = useAppStore((s) => s.headingTemplate);
+  const detailTemplate = useAppStore((s) => s.detailTemplate);
   const radioSkinMode = useAppStore((s) => s.radioSkinMode);
   const radioTeam = useAppStore((s) => s.radioTeam);
   const selectedRadioSkins = useAppStore((s) => s.selectedRadioSkins);
   const persistent = useAppStore((s) => s.persistent);
   const selectedTemplate = useAppStore((s) => s.selectedTemplate);
   const setHeadingTemplate = useAppStore((s) => s.setHeadingTemplate);
+  const setDetailTemplate = useAppStore((s) => s.setDetailTemplate);
   const setSkinMode = useAppStore((s) => s.setSkinMode);
   const setSpecificTeam = useAppStore((s) => s.setSpecificTeam);
   const setSelectedSkins = useAppStore((s) => s.setSelectedSkins);
@@ -393,8 +300,17 @@ function AlertContentsSection() {
       ? ["{messageTemplate}", "{userMessage}", "{name}"]
       : ["{name}", "{text}", "{message}"];
 
+  const detailQuickTags =
+    provider === "streamlabs"
+      ? ["{amount}", "{name}", "{userMessage}"]
+      : ["{text}"];
+
   const handleInsertTag = (tag: string) => {
     setHeadingTemplate(headingTemplate ? `${headingTemplate} ${tag}` : tag);
+  };
+
+  const handleInsertDetailTag = (tag: string) => {
+    setDetailTemplate(detailTemplate ? `${detailTemplate} ${tag}` : tag);
   };
 
   return (
@@ -449,6 +365,38 @@ function AlertContentsSection() {
           }
           type="text"
           value={headingTemplate}
+        />
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <Label className={labelClass} htmlFor="detail-template-input">
+          {t("sidebar.detailTemplateLabel")}
+        </Label>
+        <p className={descClass}>{t("sidebar.detailTemplateDesc")}</p>
+
+        <div className="flex flex-wrap items-center gap-1.5 pt-0.5 pb-1">
+          <span className="font-mono text-[10px] text-slate-500 uppercase">
+            {t("sidebar.quickTags")}:
+          </span>
+          {detailQuickTags.map((tag) => (
+            <button
+              className="rounded border border-slate-800 bg-slate-900/60 px-2 py-0.5 font-mono text-[#DF0631] text-[10px] transition hover:border-[#DF0631]/60 hover:bg-[#DF0631]/10"
+              key={tag}
+              onClick={() => handleInsertDetailTag(tag)}
+              type="button"
+            >
+              + {tag}
+            </button>
+          ))}
+        </div>
+
+        <Input
+          className={inputClass}
+          id="detail-template-input"
+          onChange={(e) => setDetailTemplate(e.target.value)}
+          placeholder={t("sidebar.detailTemplatePlaceholder")}
+          type="text"
+          value={detailTemplate}
         />
       </div>
 

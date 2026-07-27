@@ -20,6 +20,7 @@ export default function AlertPreviewPage() {
   const selectedRadioSkins = useAppStore((s) => s.selectedRadioSkins);
   const radioTeam = useAppStore((s) => s.radioTeam);
   const headingTemplate = useAppStore((s) => s.headingTemplate);
+  const detailTemplate = useAppStore((s) => s.detailTemplate);
   const setCopied = useAppStore((s) => s.setCopied);
   const triggerReplay = useAppStore((s) => s.triggerReplay);
 
@@ -38,11 +39,14 @@ export default function AlertPreviewPage() {
         radioSkinMode,
         selectedRadioSkins,
         radioTeam,
-        headingTemplate
+        headingTemplate,
+        detailTemplate
       );
     } else if (alertComponents[selectedTemplate]) {
-      rawCode =
-        alertComponents[selectedTemplate].getStreamlabsHtml(headingTemplate);
+      rawCode = alertComponents[selectedTemplate].getStreamlabsHtml(
+        headingTemplate,
+        detailTemplate
+      );
     }
   } else if (allowsMessage) {
     rawCode = getCombinedBotrixHtml(
@@ -51,10 +55,14 @@ export default function AlertPreviewPage() {
       radioSkinMode,
       selectedRadioSkins,
       radioTeam,
-      headingTemplate
+      headingTemplate,
+      detailTemplate
     );
   } else if (alertComponents[selectedTemplate]) {
-    rawCode = alertComponents[selectedTemplate].getBotrixHtml(headingTemplate);
+    rawCode = alertComponents[selectedTemplate].getBotrixHtml(
+      headingTemplate,
+      detailTemplate
+    );
   }
 
   let compiledCode = rawCode;

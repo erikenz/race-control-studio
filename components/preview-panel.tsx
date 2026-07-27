@@ -3,7 +3,7 @@ import { RadioAlert } from "@/components/alerts/radio-alert";
 import type { AlertProps } from "@/components/alerts/shared";
 import { Label } from "@/components/ui/label";
 import { BG_CLASSES, resolveHeading } from "@/lib/alert-utils";
-import { useAppStore } from "@/lib/store";
+import { TEST_VALUES, useAppStore } from "@/lib/store";
 import { useTranslation } from "react-i18next";
 
 function AlertPreviewFeed({
@@ -24,12 +24,22 @@ function AlertPreviewFeed({
   const message = useAppStore((s) => s.message);
   const persistent = useAppStore((s) => s.persistent);
   const headingTemplate = useAppStore((s) => s.headingTemplate);
+  const detailTemplate = useAppStore((s) => s.detailTemplate);
   const activePreviewTeam = useAppStore((s) => s.activePreviewTeam);
   const heading = resolveHeading(
     headingTemplate,
     name,
     text,
     message,
+    TEST_VALUES.amount,
+    provider
+  );
+  const resolvedDetail = resolveHeading(
+    detailTemplate,
+    name,
+    text,
+    message,
+    TEST_VALUES.amount,
     provider
   );
   const bgClass = BG_CLASSES[bgColor] || "bg-grid-pattern bg-slate-900";
@@ -153,7 +163,11 @@ function AlertPreviewFeed({
                 {/* Standard F1 Race Control Alert (Top Center - 40px top) */}
                 <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-[40px]">
                   <div className="pointer-events-auto">
-                    <AlertComponent heading={heading} name={name} text={text} />
+                    <AlertComponent
+                      heading={heading}
+                      name={name}
+                      text={resolvedDetail}
+                    />
                   </div>
                 </div>
 

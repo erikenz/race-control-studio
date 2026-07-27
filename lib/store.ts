@@ -8,6 +8,7 @@ export type RadioSkinMode = "specific" | "random-all" | "random-selected";
 export type ProviderType = "botrix" | "streamlabs";
 
 interface PresetData {
+  detailTemplate: string;
   headingTemplate: string;
   message: string;
   name: string;
@@ -20,6 +21,7 @@ interface AppState {
   activePreviewTeam: string;
   bgColor: string;
   copied: boolean;
+  detailTemplate: string;
   headingTemplate: string;
   locale: string;
   message: string;
@@ -40,10 +42,9 @@ interface AppActions {
   loadPreset: (presetType: string) => void;
   setBgColor: (color: string) => void;
   setCopied: (copied: boolean) => void;
+  setDetailTemplate: (template: string) => void;
   setHeadingTemplate: (template: string) => void;
   setLocale: (locale: string) => void;
-  setMessage: (message: string) => void;
-  setName: (name: string) => void;
   setPersistent: (persistent: boolean) => void;
   setProvider: (provider: ProviderType) => void;
   setSelectedSkins: (skins: string[]) => void;
@@ -51,7 +52,6 @@ interface AppActions {
   setShowGrid: (show: boolean) => void;
   setSkinMode: (mode: RadioSkinMode) => void;
   setSpecificTeam: (team: string) => void;
-  setText: (text: string) => void;
   triggerReplay: () => void;
 }
 
@@ -62,6 +62,7 @@ export type AppStore = AppState & AppActions;
 export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
   en: {
     followers: {
+      detailTemplate: "Grid entry - new follower!",
       headingTemplate: "RACE CONTROL: {name} GRID ENTRY",
       message: "",
       name: "Test_User",
@@ -69,6 +70,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "Grid entry - new follower!",
     },
     "gift-sub": {
+      detailTemplate: "Gifted 5 subscriptions!",
       headingTemplate: "RACE CONTROL: {name} GIFT INCIDENT",
       message: "",
       name: "Test_User",
@@ -76,6 +78,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "Gifted 5 subscriptions!",
     },
     host: {
+      detailTemplate: "Restart incident: joined with 120 viewers!",
       headingTemplate: "RACE CONTROL: {name} RESTART INCIDENT",
       message: "",
       name: "Test_User",
@@ -83,6 +86,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "Restart incident: joined with 120 viewers!",
     },
     kicks: {
+      detailTemplate: "sent 500 Kicks!",
       headingTemplate: "RACE CONTROL: {name} KICK INCIDENT",
       message: "This is a test message",
       name: "Test_User",
@@ -90,6 +94,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "sent 500 Kicks!",
     },
     subscription: {
+      detailTemplate: "stayed with the team for 12 months!",
       headingTemplate: "RACE CONTROL: {name} RENEWAL INCIDENT",
       message: "This is a test message",
       name: "Test_User",
@@ -97,6 +102,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "stayed with the team for 12 months!",
     },
     "tip-donate": {
+      detailTemplate: "tipped $15.00 USD",
       headingTemplate: "RACE CONTROL: {name} PIT STOP INCIDENT",
       message: "This is a test message",
       name: "Test_User",
@@ -106,6 +112,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
   },
   es: {
     followers: {
+      detailTemplate: "¡Ingreso a pista - nuevo seguidor!",
       headingTemplate: "CONTROL DE CARRERA: INGRESO A PISTA DE {name}",
       message: "",
       name: "Usuario_Prueba",
@@ -113,6 +120,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "¡Ingreso a pista - nuevo seguidor!",
     },
     "gift-sub": {
+      detailTemplate: "¡Regaló 5 suscripciones!",
       headingTemplate: "CONTROL DE CARRERA: INCIDENTE DE REGALO DE {name}",
       message: "",
       name: "Usuario_Prueba",
@@ -120,6 +128,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "¡Regaló 5 suscripciones!",
     },
     host: {
+      detailTemplate: "¡Reinicio de carrera: se unió con 120 espectadores!",
       headingTemplate: "CONTROL DE CARRERA: REINICIO CON {name}",
       message: "",
       name: "Usuario_Prueba",
@@ -127,6 +136,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "¡Reinicio de carrera: se unió con 120 espectadores!",
     },
     kicks: {
+      detailTemplate: "¡envió 500 Kicks!",
       headingTemplate: "CONTROL DE CARRERA: INCIDENTE KICK DE {name}",
       message: "Este es un mensaje de prueba",
       name: "Usuario_Prueba",
@@ -134,6 +144,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "¡envió 500 Kicks!",
     },
     subscription: {
+      detailTemplate: "¡permanece en el equipo por 12 meses!",
       headingTemplate: "CONTROL DE CARRERA: RENOVACIÓN DE {name}",
       message: "Este es un mensaje de prueba",
       name: "Usuario_Prueba",
@@ -141,6 +152,7 @@ export const LOCALIZED_PRESETS: Record<string, Record<string, PresetData>> = {
       text: "¡permanece en el equipo por 12 meses!",
     },
     "tip-donate": {
+      detailTemplate: "¡donó $15.00 USD!",
       headingTemplate: "CONTROL DE CARRERA: PARADA EN PITS DE {name}",
       message: "Este es un mensaje de prueba",
       name: "Usuario_Prueba",
@@ -161,46 +173,7 @@ export const PRESET_LABELS: Record<string, string> = {
   "tip-donate": "Tip/Donate",
 };
 
-// --- Known Default Value Checkers ---
-
-const KNOWN_DEFAULT_NAMES = new Set([
-  "Test_User",
-  "Usuario_Prueba",
-  "Piloto_Prueba",
-  "HAMILTON_44",
-  "Rookie_Driver",
-  "Team_Principal",
-  "Safety_Car",
-  "KickStreamer",
-  "Pit_Crew",
-]);
-
-const KNOWN_DEFAULT_MESSAGES = new Set([
-  "This is a test message",
-  "Este es un mensaje de prueba",
-  "Staying with the team. 12 months completed!",
-  "Launch control active! First row start on Kick!",
-  "For tyre compound upgrade!",
-  "",
-]);
-
-const KNOWN_DEFAULT_TEXTS = new Set([
-  "stayed with the team for 12 months!",
-  "¡permanece en el equipo por 12 meses!",
-  "Grid entry - green light on track!",
-  "Grid entry - new follower!",
-  "¡Ingreso a pista - nuevo seguidor!",
-  "Sponsored 5 drivers in the pit lane!",
-  "Gifted 5 subscriptions!",
-  "¡Regaló 5 suscripciones!",
-  "Restart incident: joined force with 120 viewers!",
-  "Restart incident: joined with 120 viewers!",
-  "¡Reinicio de carrera: se unió con 120 espectadores!",
-  "sent 500 Kicks!",
-  "¡envió 500 Kicks!",
-  "tipped $15.00 USD",
-  "¡donó $15.00 USD!",
-]);
+// --- Known Default Heading Checker ---
 
 const KNOWN_DEFAULT_HEADINGS = new Set([
   "RACE CONTROL: {name} RENEWAL INCIDENT",
@@ -217,18 +190,6 @@ const KNOWN_DEFAULT_HEADINGS = new Set([
   "CONTROL DE CARRERA: PARADA EN PITS DE {name}",
   "RACE CONTROL: {messageTemplate}",
 ]);
-
-function isDefaultName(value: string): boolean {
-  return KNOWN_DEFAULT_NAMES.has(value.trim());
-}
-
-function isDefaultMessage(value: string): boolean {
-  return KNOWN_DEFAULT_MESSAGES.has(value.trim());
-}
-
-function isDefaultText(value: string): boolean {
-  return KNOWN_DEFAULT_TEXTS.has(value.trim());
-}
 
 function isDefaultHeading(value: string): boolean {
   return KNOWN_DEFAULT_HEADINGS.has(value.trim());
@@ -259,15 +220,23 @@ function determinePreviewTeam(
 
 // --- Initial State ---
 
+export const TEST_VALUES = {
+  amount: "$15.00 USD",
+  message: "this is a test message",
+  name: "test-user",
+  text: "tipped $15.00 USD",
+} as const;
+
 const INITIAL_STATE: AppState = {
   activePreset: "subscription",
   activePreviewTeam: "ferrari",
   bgColor: "grid",
   copied: false,
+  detailTemplate: LOCALIZED_PRESETS.en.subscription.detailTemplate,
   headingTemplate: LOCALIZED_PRESETS.en.subscription.headingTemplate,
   locale: "en",
-  message: "This is a test message",
-  name: "Test_User",
+  message: TEST_VALUES.message,
+  name: TEST_VALUES.name,
   persistent: false,
   provider: "botrix",
   radioSkinMode: "specific",
@@ -276,7 +245,7 @@ const INITIAL_STATE: AppState = {
   selectedTemplate: "subscription",
   showCode: false,
   showGrid: true,
-  text: LOCALIZED_PRESETS.en.subscription.text,
+  text: TEST_VALUES.text,
   triggerKey: 1,
 };
 
@@ -302,16 +271,18 @@ export const useAppStore = create<AppStore>()(
             state.selectedRadioSkins,
             state.radioTeam
           ),
+          detailTemplate: preset.detailTemplate,
           headingTemplate: preset.headingTemplate,
-          message: preset.message,
-          name: preset.name,
+          message: TEST_VALUES.message,
+          name: TEST_VALUES.name,
           selectedTemplate: preset.template,
-          text: preset.text,
+          text: TEST_VALUES.text,
           triggerKey: state.triggerKey + 1,
         });
       },
       setBgColor: (bgColor) => set({ bgColor }),
       setCopied: (copied) => set({ copied }),
+      setDetailTemplate: (detailTemplate) => set({ detailTemplate }),
       setHeadingTemplate: (headingTemplate) => set({ headingTemplate }),
 
       setLocale: (locale) => {
@@ -324,25 +295,22 @@ export const useAppStore = create<AppStore>()(
         const targetPreset =
           localePresets[state.activePreset] || localePresets.subscription;
 
-        const updateName = isDefaultName(state.name);
-        const updateMessage = isDefaultMessage(state.message);
-        const updateText = isDefaultText(state.text);
         const updateHeading = isDefaultHeading(state.headingTemplate);
+        const updateDetail = state.detailTemplate === "";
 
         set({
+          detailTemplate: updateDetail
+            ? targetPreset.detailTemplate
+            : state.detailTemplate,
           headingTemplate: updateHeading
             ? targetPreset.headingTemplate
             : state.headingTemplate,
           locale,
-          message: updateMessage ? targetPreset.message : state.message,
-          name: updateName ? targetPreset.name : state.name,
-          text: updateText ? targetPreset.text : state.text,
+          message: TEST_VALUES.message,
+          name: TEST_VALUES.name,
+          text: TEST_VALUES.text,
         });
       },
-
-      setMessage: (message) => set({ message }),
-
-      setName: (name) => set({ name }),
 
       setPersistent: (persistent) => set({ persistent }),
 
@@ -382,7 +350,6 @@ export const useAppStore = create<AppStore>()(
           radioTeam: team,
         });
       },
-      setText: (text) => set({ text }),
 
       triggerReplay: () => {
         const state = get();
@@ -403,10 +370,9 @@ export const useAppStore = create<AppStore>()(
           activePreset,
           activePreviewTeam,
           bgColor,
+          detailTemplate,
           headingTemplate,
           locale,
-          message,
-          name,
           persistent,
           provider,
           radioSkinMode,
@@ -415,16 +381,14 @@ export const useAppStore = create<AppStore>()(
           selectedTemplate,
           showCode,
           showGrid,
-          text,
         } = state;
         return {
           activePreset,
           activePreviewTeam,
           bgColor,
+          detailTemplate,
           headingTemplate,
           locale,
-          message,
-          name,
           persistent,
           provider,
           radioSkinMode,
@@ -433,7 +397,6 @@ export const useAppStore = create<AppStore>()(
           selectedTemplate,
           showCode,
           showGrid,
-          text,
         };
       },
       storage: createJSONStorage(() => localStorage),

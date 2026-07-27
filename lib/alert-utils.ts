@@ -18,6 +18,7 @@ export function resolveHeading(
   name: string,
   text: string,
   message: string,
+  amount = "$15.00 USD",
   provider: "botrix" | "streamlabs" = "botrix"
 ): string {
   if (provider === "streamlabs") {
@@ -27,17 +28,22 @@ export function resolveHeading(
       .replace(/\{userMessage\}/g, message.toUpperCase())
       .replace(/\{name\}/g, name.toUpperCase())
       .replace(/\{text\}/g, text.toUpperCase())
-      .replace(/\{message\}/g, message.toUpperCase());
+      .replace(/\{message\}/g, message.toUpperCase())
+      .replace(/\{amount\}/g, amount);
   }
   return template
     .replace(/\{name\}/g, name.toUpperCase())
     .replace(/\{text\}/g, text.toUpperCase())
-    .replace(/\{message\}/g, message.toUpperCase());
+    .replace(/\{message\}/g, message.toUpperCase())
+    .replace(/\{amount\}/g, amount);
 }
 
 export type AlertComponentType = ComponentType<AlertProps> & {
-  getBotrixHtml: (headingTemplate?: string) => string;
-  getStreamlabsHtml: (headingTemplate?: string) => string;
+  getBotrixHtml: (headingTemplate?: string, detailTemplate?: string) => string;
+  getStreamlabsHtml: (
+    headingTemplate?: string,
+    detailTemplate?: string
+  ) => string;
 };
 
 export const alertComponents: Record<string, AlertComponentType> = {
@@ -62,7 +68,8 @@ export function getCombinedBotrixHtml(
   radioSkinMode: "specific" | "random-all" | "random-selected",
   selectedRadioSkins: string[],
   radioTeam: string,
-  headingTemplate: string
+  headingTemplate: string,
+  detailTemplate: string
 ) {
   let allowedTeams: string[];
   if (radioSkinMode === "specific") {
@@ -162,7 +169,7 @@ export function getCombinedBotrixHtml(
         </div>
         <div class="f1-alert-body">
           <p class="f1-heading-text" id="alert-heading">${headingTemplate}</p>
-          <p class="f1-detail-text" id="alert-detail">{text}</p>
+          <p class="f1-detail-text" id="alert-detail">${detailTemplate}</p>
         </div>
       </div>
     </div>
@@ -233,7 +240,8 @@ export function getCombinedStreamlabsHtml(
   radioSkinMode: "specific" | "random-all" | "random-selected",
   selectedRadioSkins: string[],
   radioTeam: string,
-  headingTemplate: string
+  headingTemplate: string,
+  detailTemplate: string
 ) {
   let allowedTeams: string[];
   if (radioSkinMode === "specific") {
@@ -299,6 +307,11 @@ export function getCombinedStreamlabsHtml(
       text-shadow: none !important;
     }
 
+    /* Hide detail line — Streamlabs only replaces variables in #alert-message */
+    #alert-detail {
+      /* visible — uses configurable detailTemplate */
+    }
+
     .f1-alert-banner {
       animation: ${persistent ? "none !important" : "f1PlayAlert 8s cubic-bezier(0.22, 1, 0.36, 1) forwards !important"};
       ${persistent ? "opacity: 1 !important; clip-path: polygon(0% 0%, 111% 0%, 100% 100%, -11% 100%) !important;" : ""}
@@ -359,7 +372,7 @@ export function getCombinedStreamlabsHtml(
           </div>
           <div class="f1-alert-body">
             <div id="alert-message" class="f1-heading-text">${headingTemplate || "RACE CONTROL: {messageTemplate}"}</div>
-            <div id="alert-detail" class="f1-detail-text">RACE CONTROL INCIDENT</div>
+            <div id="alert-detail" class="f1-detail-text">${detailTemplate || "{text}"}</div>
           </div>
         </div>
       </div>
@@ -399,7 +412,7 @@ if(n){var m=n.textContent.match(/\\d+$/);if(m)d.querySelector('.radio-card-numbe
             </div>
             <div class="radio-header-content">
               <div class="radio-card-name-row">
-                <span class="radio-card-name" id="radio-name">TEAM RADIO</span>
+                <span class="radio-card-name" id="radio-name">{name}</span>
               </div>
               <div class="radio-header-bottom-row">
                 <div class="radio-card-number-wrapper">
